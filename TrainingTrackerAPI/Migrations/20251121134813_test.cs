@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace TrainingTracker.Migrations
+namespace TrainingTrackerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NewConnString : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
