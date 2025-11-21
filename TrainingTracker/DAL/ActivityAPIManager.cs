@@ -14,7 +14,7 @@ namespace TrainingTracker.DAL
                 var json = JsonSerializer.Serialize(activity);
 
                 StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync("api/activities", httpContent);
+                HttpResponseMessage response = await client.PostAsync("api/Activities/CreateRunning", httpContent);
 
             }
         }

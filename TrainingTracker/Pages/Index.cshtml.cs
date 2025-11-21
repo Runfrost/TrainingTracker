@@ -16,7 +16,8 @@ namespace TrainingTracker.Pages
             _http = factory.CreateClient("Backend");
         }
 
-        public TrainingTrackerAPI.DTO.ActivitesCreateDto Activity;
+        [BindProperty]
+        public TrainingTrackerAPI.DTO.ActivitesCreateDto Activity { get; set; }
 
         public void OnGet()
         {
