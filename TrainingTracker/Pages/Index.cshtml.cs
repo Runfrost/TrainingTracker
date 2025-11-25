@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace TrainingTracker.Pages
@@ -16,15 +17,25 @@ namespace TrainingTracker.Pages
             _http = factory.CreateClient("Backend");
         }
 
+        public List<SelectListItem> ActivityTypes { get; set; }
+
         [BindProperty]
         public TrainingTrackerAPI.DTO.ActivitesCreateDto Activity { get; set; }
 
         public void OnGet()
         {
+            ActivityTypes = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Running", Text = "Running" },
+                new SelectListItem { Value = "Walking", Text = "Walking" },
+                new SelectListItem { Value = "Cycling", Text = "Cycling" }
+
+            }; 
 
         }
         public async Task<IActionResult> OnPostAsync()
         {
+           
             await DAL.ActivityAPIManager.SaveActivity(Activity);
 
             return RedirectToPage("./Index");

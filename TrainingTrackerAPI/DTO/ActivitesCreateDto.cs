@@ -6,6 +6,8 @@ namespace TrainingTrackerAPI.DTO
     {
         public string Name { get; set; }
         public double Distance { get; set; }
+        public string Type { get; set; }
+
         //public ApplicationUser User { get; set; }
     }
 }

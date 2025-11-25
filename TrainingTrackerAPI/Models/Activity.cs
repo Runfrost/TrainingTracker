@@ -15,4 +15,5 @@ namespace TrainingTrackerAPI.Models
         public int? CaloriesBurned { get; set; }
         //public ApplicationUser? User { get; set; }
     }
+
 }

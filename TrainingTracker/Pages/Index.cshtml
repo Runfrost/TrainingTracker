@@ -6,7 +6,11 @@
 
 <div class="text-center">
     <form method="post">
-        
+        <label asp-for="Activity.Type"></label>
+        <select asp-for="Activity.Type" asp-items="Model.ActivityTypes">
+        <option value="">-- Välj aktivitetstyp --</option>
+        </select>
+        <br />
         <label asp-for="Activity.Name"></label>
         <input asp-for="Activity.Name" />
         <br />

@@ -18,25 +18,47 @@ namespace TrainingTrackerAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRunning([FromBody] DTO.ActivitesCreateDto newActivity)
         {
-            var running = new Running
+
+            Activity activity = new Running();
+
+            if (newActivity.Type == "Running")
             {
-                Name = newActivity.Name,
-                Distance = newActivity.Distance,
-                ActivityDate = DateTime.UtcNow,
-                TotalTimeInSeconds = 0,
-                AverageCadence = 0
-            };
-            _context.Activities.Add(running);
+                activity = new Running
+                {
+                    Name = newActivity.Name,
+                    Distance = newActivity.Distance,
+                    ActivityDate = DateTime.UtcNow,
+                    TotalTimeInSeconds = 0,
+                    AverageCadence = 0
+                };
+                //_context.Activities.Add(activity);
+            }
+            if (newActivity.Type == "Walking")
+            {
+                activity = new Walking
+                {
+                    Name = newActivity.Name,
+                    Distance = newActivity.Distance,
+                    ActivityDate = DateTime.UtcNow,
+                    TotalTimeInSeconds = 0,
+                    AverageCadence = 0
+                };
+                //_context.Activities.Add(activity);
+
+            }
+            _context.Activities.Add(activity);
             await _context.SaveChangesAsync();
 
-            return Ok(running);
+            return Ok(activity);
+
+            return BadRequest("Unsupported activity type");
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivityById(int id, ActivitiesEditDto editDto)
         {
             var activityToEdit = (Running)_context.Activities.Where(a => a.Id == id).SingleOrDefaultAsync().Result;
-            if(activityToEdit == null)
+            if (activityToEdit == null)
             {
                 return NotFound();
             }
