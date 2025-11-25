@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using TrainingTrackerAPI.Models;
 
 namespace TrainingTracker.DAL
 {
@@ -17,6 +18,36 @@ namespace TrainingTracker.DAL
                 HttpResponseMessage response = await client.PostAsync("api/Activities/CreateRunning", httpContent);
 
             }
+        }
+
+        public static async Task<List<Activity>> GetAllActivities()
+
+        {
+
+            List<Activity> activities = new();
+
+            using (var client = new HttpClient())
+
+            {
+
+                client.BaseAddress = BaseAddress;
+
+                HttpResponseMessage response = await client.GetAsync("api/Activities");
+
+                if (response.IsSuccessStatusCode)
+
+                {
+
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    activities = JsonSerializer.Deserialize<List<Activity>>(responseString);
+
+                }
+
+            }
+
+            return activities;
+
         }
     }
 }

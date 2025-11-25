@@ -19,19 +19,41 @@
         <br />
         <input type="submit" value="Lägg till aktivitet" />
     </form>
-    @* <div>
-        <div>
-            <label>Aktivitetsnamn: </label>
-            <input type="text" />
-        </div>
-        <div>
-            <label>Distans: </label>
-            <input type="number" />
-        </div>
-        <div>
-            <button type="submit">Spara aktivitet</button>
-        </div>
-        
-    </div> *@
-    
+
 </div>
+
+<table class="table table-striped">
+
+    <tr>
+
+        <td>ID</td>
+
+        <td>Title</td>
+
+        <td>Distance</td>
+
+        <td>Date</td>
+
+    </tr>
+
+    @foreach (var activity in Model.Activities)
+
+    {
+
+        <tr>
+
+            <td>@activity.Id</td>
+
+            <td>@activity.Name</td>
+
+            <td>@activity.Distance</td>
+
+            <td>@activity.ActivityDate</td>
+
+            <td><a asp-route-id="@activity.Id">Mer info</a></td>
+
+        </tr>
+
+    }
+
+</table>

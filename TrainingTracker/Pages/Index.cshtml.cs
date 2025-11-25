@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using TrainingTrackerAPI.Models;
 
 namespace TrainingTracker.Pages
 {
@@ -22,8 +23,13 @@ namespace TrainingTracker.Pages
         [BindProperty]
         public TrainingTrackerAPI.DTO.ActivitesCreateDto Activity { get; set; }
 
-        public void OnGet()
+        [BindProperty]
+        public List<Activity>Activities { get; set; }
+
+        public async Task OnGetAsync()
         {
+            Activities = await DAL.ActivityAPIManager.GetAllActivities();
+
             ActivityTypes = new List<SelectListItem>
             {
                 new SelectListItem { Value = "Running", Text = "Running" },
