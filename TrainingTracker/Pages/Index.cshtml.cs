@@ -25,8 +25,12 @@ namespace TrainingTracker.Pages
 
         public List<ActivityDto> Activities { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int deleteId)
         {
+            if(deleteId != 0)
+            {
+                await DAL.ActivityAPIManager.DeleteActivity(deleteId);
+            }
             Activities = await DAL.ActivityAPIManager.GetAllActivities();
 
             ActivityTypes = new List<SelectListItem>

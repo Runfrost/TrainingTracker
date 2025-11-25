@@ -56,5 +56,15 @@ namespace TrainingTracker.DAL
             return activities;
 
         }
+        public static async Task DeleteActivity(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+
+                HttpResponseMessage response = await client.DeleteAsync($"api/activities/DeleteActivityById/{id}");
+
+            }
+        }
     }
 }
