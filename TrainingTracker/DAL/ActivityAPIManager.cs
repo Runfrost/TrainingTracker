@@ -20,11 +20,11 @@ namespace TrainingTracker.DAL
             }
         }
 
-        public static async Task<List<Activity>> GetAllActivities()
+        public static async Task<List<ActivityDto>> GetAllActivities()
 
         {
 
-            List<Activity> activities = new();
+            List<ActivityDto> activities = new();
 
             using (var client = new HttpClient())
 
@@ -32,7 +32,7 @@ namespace TrainingTracker.DAL
 
                 client.BaseAddress = BaseAddress;
 
-                HttpResponseMessage response = await client.GetAsync("api/Activities");
+                HttpResponseMessage response = await client.GetAsync("/api/Activities/GetAllActivities");
 
                 if (response.IsSuccessStatusCode)
 
@@ -40,7 +40,14 @@ namespace TrainingTracker.DAL
 
                     string responseString = await response.Content.ReadAsStringAsync();
 
-                    activities = JsonSerializer.Deserialize<List<Activity>>(responseString);
+                    //activities = JsonSerializer.Deserialize<List<ActivityDto>>(responseString);
+                    activities = JsonSerializer.Deserialize<List<ActivityDto>>(
+                        responseString,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        }
+                    );
 
                 }
 

@@ -88,9 +88,28 @@ namespace TrainingTrackerAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllActivities()
         {
-            var activities = await _context.Activities.ToListAsync();
+            var activities = await _context.Activities
+                .Select(a => new ActivityDto
+                {
+                    Id = a.Id,
+                    Type = EF.Property<string>(a, "ActivityType"),
+                    Name = a.Name,
+                    Distance = a.Distance,
+                    ActivityDate = a.ActivityDate,
+
+                    TotalTimeInSeconds = a.TotalTimeInSeconds,
+
+
+
+
+                    // Only for Running
+                    //AverageCadence = a is Running r ? r.AverageCadence : null
+                })
+                .ToListAsync();
+
             return Ok(activities);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetActivityById(int id)

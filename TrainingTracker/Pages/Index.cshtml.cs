@@ -23,8 +23,7 @@ namespace TrainingTracker.Pages
         [BindProperty]
         public TrainingTrackerAPI.DTO.ActivitesCreateDto Activity { get; set; }
 
-        [BindProperty]
-        public List<Activity>Activities { get; set; }
+        public List<ActivityDto> Activities { get; set; }
 
         public async Task OnGetAsync()
         {
