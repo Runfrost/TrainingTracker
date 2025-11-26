@@ -22,7 +22,7 @@ namespace TrainingTracker.DAL
                 var json = JsonSerializer.Serialize(activity);
 
                 StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync("api/Activities/CreateRunning", httpContent);
+                HttpResponseMessage response = await client.PostAsync("api/Activities", httpContent);
 
             }
         }
@@ -30,7 +30,7 @@ namespace TrainingTracker.DAL
         public async Task<List<ActivityDto>> GetAllActivities()
 
         {
-            var activities = await _http.GetFromJsonAsync<List<ActivityDto>>("/api/Activities/GetAllActivities");
+            var activities = await _http.GetFromJsonAsync<List<ActivityDto>>("/api/Activities");
             return activities;
 
             //List<ActivityDto> activities = new();
@@ -69,7 +69,7 @@ namespace TrainingTracker.DAL
         }
         public async Task<ActivityDto> GetActivity(int id)
         { 
-            var activity = await _http.GetFromJsonAsync<ActivityDto>($"/api/Activities/GetActivityById/{id}");
+            var activity = await _http.GetFromJsonAsync<ActivityDto>($"/api/Activities/{id}");
             return activity;
 
             //ActivityDto activity = new();
@@ -102,14 +102,14 @@ namespace TrainingTracker.DAL
                 var json = JsonSerializer.Serialize(activity);
 
                 StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PutAsync($"api/activities/EditActivityById/{id}", httpContent);
+                HttpResponseMessage response = await client.PutAsync($"api/activities/{id}", httpContent);
 
             }
         }
 
         public  async Task DeleteActivity(int id)
         {
-            var response = await _http.DeleteAsync($"api/activities/DeleteActivityById/{id}");
+            var response = await _http.DeleteAsync($"api/activities/{id}");
             response.EnsureSuccessStatusCode();
             //using (var client = new HttpClient())
             //{

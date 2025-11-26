@@ -6,75 +6,56 @@ using TrainingTrackerAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+var isTesting = builder.Environment.IsEnvironment("Testing");
+
+
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlServerOptionsAction: sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null);
-        }));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Missing connection string 'DefaultConnection'.");
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-.AddEntityFrameworkStores<ApplicationDbContext>().
-AddDefaultTokenProviders();
+var useSqlite = builder.Configuration.GetValue<bool>("UseSqlite");
 
-//builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-//{
-//    options.SignIn.RequireConfirmedAccount = false;
-//})
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
+if (isTesting || useSqlite)
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            sqlServerOptions =>
+            {
+                sqlServerOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+            }));
+
+    builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+}
+
 
 var app = builder.Build();
 
-
-
-
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
 
-
 app.UseHttpsRedirection();
-app.MapControllers();
-
-//var summaries = new[]
-//{
-//    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-//};
-
-//app.MapGet("/weatherforecast", () =>
-//    {
-//        var forecast = Enumerable.Range(1, 5).Select(index =>
-//                new WeatherForecast
-//                (
-//                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-//                    Random.Shared.Next(-20, 55),
-//                    summaries[Random.Shared.Next(summaries.Length)]
-//                ))
-//            .ToArray();
-//        return forecast;
-//    })
-//    .WithName("GetWeatherForecast");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.Run();
-public partial class Program { }
+app.MapControllers();
 
-//record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-//{
-//    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-//}
+app.Run();
+
+public partial class Program { }

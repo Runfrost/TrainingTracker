@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TrainingTrackerAPI.Data;
+using TrainingTrackerAPI.Models;
 
 namespace TrainingTracker.Tests
 {
@@ -15,24 +19,32 @@ namespace TrainingTracker.Tests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.UseEnvironment("Testing");
+
+            builder.ConfigureAppConfiguration((context, config) =>
+            {
+                var settings = new Dictionary<string, string?>
+                {
+                    ["UseSqlite"] = "true",
+                    ["ConnectionStrings:DefaultConnection"] = "DataSource=:memory:"
+                };
+
+                config.AddInMemoryCollection(settings);
+            });
+
             builder.ConfigureServices(services =>
             {
-                //
-                // 1. REMOVE existing DbContext (SQL Server in Program.cs)
-                //
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                        typeof(DbContextOptions<ApplicationDbContext>));
-
-                if (descriptor != null)
-                    services.Remove(descriptor);
-
-                //
-                // 2. Register SQL Server for testing
-                //
-                services.AddDbContext<ApplicationDbContext>(options =>
+                services.AddSingleton<SqliteConnection>(_ =>
                 {
-                    options.UseSqlServer(TestConnectionString);
+                    var conn = new SqliteConnection("DataSource=:memory:");
+                    conn.Open();
+                    return conn;
+                });
+
+                services.AddDbContext<ApplicationDbContext>((provider, options) =>
+                {
+                    var conn = provider.GetRequiredService<SqliteConnection>();
+                    options.UseSqlite(conn);
                 });
             });
         }
@@ -41,17 +53,9 @@ namespace TrainingTracker.Tests
         {
             var host = base.CreateHost(builder);
 
-            //
-            // 3. Apply migrations & ensure DB exists
-            //
             using var scope = host.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            db.Database.EnsureDeleted();   // optional, for a clean run
             db.Database.EnsureCreated();
-
-            // Or if using migrations:
-            // db.Database.Migrate();
 
             return host;
         }
