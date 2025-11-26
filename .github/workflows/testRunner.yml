@@ -28,6 +28,6 @@ jobs:
         run: dotnet build
 
       - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore --verbosity minimal
         env:
           USE_SQLITE: "true"
