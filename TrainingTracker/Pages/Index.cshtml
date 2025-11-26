@@ -7,7 +7,7 @@
 <div class="">
     <form method="post">
         <input asp-for="Activity.Id" type="hidden" />
-        <input asp-for="Activity.ActivityDate" type="hidden" />
+        
         <label asp-for="Activity.Type"></label>
         <br />
         <select asp-for="Activity.Type" asp-items="Model.ActivityTypes">
@@ -17,6 +17,10 @@
         <label asp-for="Activity.Name"></label>
         <br />
         <input asp-for="Activity.Name" />
+        <br />
+        <label asp-for="Activity.ActivityDate"></label>
+        <br />
+        <input asp-for="Activity.ActivityDate" />
         <br />
         <label asp-for="Activity.Distance"></label>
         <br />

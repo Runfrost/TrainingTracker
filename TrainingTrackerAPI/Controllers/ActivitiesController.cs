@@ -7,7 +7,7 @@ using TrainingTrackerAPI.Models;
 namespace TrainingTrackerAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class ActivitiesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +27,7 @@ namespace TrainingTrackerAPI.Controllers
                     {
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
-                        ActivityDate = DateTime.UtcNow,
+                        ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = 0,
                         AverageCadence = 0
                     };
@@ -38,7 +38,7 @@ namespace TrainingTrackerAPI.Controllers
                     {
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
-                        ActivityDate = DateTime.UtcNow,
+                        ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = 0
                     };
                     break;
@@ -48,7 +48,7 @@ namespace TrainingTrackerAPI.Controllers
                     {
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
-                        ActivityDate = DateTime.UtcNow,
+                        ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = 0
                         // Lägg till andra properties om du har dem, t.ex. AverageSpeed
                     };
@@ -134,6 +134,10 @@ namespace TrainingTrackerAPI.Controllers
         public async Task<IActionResult> DeleteActivityById(int id)
         {
             var activityToDelete = await _context.Activities.FindAsync(id);
+            if(activityToDelete == null)
+            {
+                return NotFound();
+            }
             _context.Activities.Remove(activityToDelete);
             await _context.SaveChangesAsync();
             return Ok();

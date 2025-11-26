@@ -43,7 +43,7 @@ namespace TrainingTracker.Pages
                 Activity.Name = activity.Name;
                 Activity.Distance = activity.Distance;
                 Activity.Type = activity.Type;
-                Activity.ActivityDate = DateTime.Now;
+                Activity.ActivityDate = activity.ActivityDate;
             }
             Activities = await _api.GetAllActivities();
 
