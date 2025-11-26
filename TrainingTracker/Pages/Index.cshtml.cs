@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using TrainingTracker.DAL;
-using TrainingTrackerAPI.Models;
 
 namespace TrainingTracker.Pages
 {
@@ -58,7 +55,9 @@ namespace TrainingTracker.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            if(Activity.Id == null)
+
+
+            if (Activity.Id == null && ModelState.IsValid)
             {
                 await DAL.ActivityAPIManager.SaveActivity(Activity);
             }
@@ -69,7 +68,10 @@ namespace TrainingTracker.Pages
 
 
 
-                return RedirectToPage("./Index");
+            return RedirectToPage("./Index");
+
+
+
 
         }
     }
