@@ -69,7 +69,7 @@ namespace TrainingTrackerAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivityById(int id, ActivitiesEditDto editDto)
         {
-            var activityToEdit = (Running)_context.Activities.Where(a => a.Id == id).SingleOrDefaultAsync().Result;
+            var activityToEdit = _context.Activities.Where(a => a.Id == id).SingleOrDefaultAsync().Result;
             if (activityToEdit == null)
             {
                 return NotFound();
@@ -79,7 +79,7 @@ namespace TrainingTrackerAPI.Controllers
             activityToEdit.Distance = editDto.Distance;
             activityToEdit.ActivityDate = editDto.ActivityDate;
             activityToEdit.TotalTimeInSeconds = editDto.TotalTimeInSeconds;
-            activityToEdit.AverageCadence = editDto.AverageCadence;
+            //activityToEdit.AverageCadence = editDto.AverageCadence;
 
             await _context.SaveChangesAsync();
             return Ok();

@@ -39,9 +39,11 @@ namespace TrainingTracker.Pages
             {
                 Activity = new();
                 var activity = await _api.GetActivity(editId);
+                Activity.Id = activity.Id;
                 Activity.Name = activity.Name;
                 Activity.Distance = activity.Distance;
                 Activity.Type = activity.Type;
+                Activity.ActivityDate = DateTime.Now;
             }
             Activities = await _api.GetAllActivities();
 
@@ -56,11 +58,18 @@ namespace TrainingTracker.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            await DAL.ActivityAPIManager.SaveActivity(Activity);
+            if(Activity.Id == null)
+            {
+                await DAL.ActivityAPIManager.SaveActivity(Activity);
+            }
+            else
+            {
+                await ActivityAPIManager.UpdateActivity(Activity, (int)Activity.Id);
+            }
 
 
 
-            return RedirectToPage("./Index");
+                return RedirectToPage("./Index");
 
         }
     }
