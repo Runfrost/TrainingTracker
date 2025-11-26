@@ -15,7 +15,8 @@ namespace TrainingTracker.Tests
         : WebApplicationFactory<TProgram> where TProgram : class
     {
         private const string TestConnectionString =
-            "Server=localhost\\SQLEXPRESS;Database=TrainingTrackerApiDb2Test;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true";
+            //"Server=localhost\\SQLEXPRESS;Database=TrainingTrackerApiDb2Test;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true";
+            "Server=localhost,1433;Database=TrainingTrackerApiDb2Test;\r\nUser Id=SA;Password=Your_password123;TrustServerCertificate=True";
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
