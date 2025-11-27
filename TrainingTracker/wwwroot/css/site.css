@@ -1,22 +1,61 @@
-html {
-  font-size: 14px;
+
+.layout {
+    display: flex;
+    min-height: 100vh;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+
+.layout-sidebar {
+    width: 240px;
+    background: linear-gradient(180deg, #111827, #0b1220);
+    color: #e5e7eb;
+    padding: 12px 18px 24px 18px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.sidebar-logo {
+    margin-bottom: 8px;
+    text-align: left;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+    .sidebar-logo img {
+        max-width: 160px;
+        height: auto;
+    }
+
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #e5e7eb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
 }
 
-body {
-  margin-bottom: 60px;
+    .sidebar-link i {
+        font-size: 18px;
+        color: #e5e7eb;
+    }
+
+
+    .sidebar-link:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #F27F31;
+    }
+
+        .sidebar-link:hover i {
+            color: #F27F31;
+        }
+
+
+/* Den högra sidan */
+.layout-content {
+    flex: 1;
+    background: #f3f4f6;
+    padding: 30px 40px;
 }
+

@@ -1,0 +1,149 @@
+﻿
+
+.layout-content {
+    padding: 0;
+    background: transparent;
+}
+
+    .layout-content > main {
+        padding: 0;
+    }
+
+/* Ingen footer på sidan (annars puttar den ner sidan) */
+.layout-footer {
+    display: none;
+}
+
+
+
+.activity-background {
+    height: 100vh; 
+    width: 100%;
+    background-image: url("/images/activitiesb.png");
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    display: flex; 
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 32px; 
+}
+
+
+
+.activities-panel {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(252, 248, 235, 0.96); 
+    border-radius: 20px;
+    padding: 20px 24px 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    font-size: 14px; 
+    border-top: 4px solid #F27F31; 
+}
+
+
+.activities-title {
+    font-size: 26px; 
+    font-weight: 600;
+    margin-bottom: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #020617; 
+}
+
+
+.activities-intro {
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+
+
+.activities-input {
+    font-size: 14px; 
+    padding-top: 6px; 
+    padding-bottom: 6px;
+}
+
+
+.activities-btn {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 7px 26px; 
+    font-size: 15px; 
+    font-weight: 500;
+    background-color: #F27F31; 
+    border: 1px solid #F27F31;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .activities-btn:hover {
+        background-color: #E06F22;
+        border-color: #E06F22;
+    }
+
+
+
+.activities-subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #020617;
+}
+
+
+.activities-table-wrapper {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 8px 10px;
+    overflow: hidden;
+    max-height: 140px; 
+    overflow-y: auto; /* scroll om fler rader */
+}
+
+
+.activities-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px; 
+    color: #222;
+}
+
+    
+    .activities-table thead {
+        background-color: #f5f2e5;
+    }
+
+    .activities-table th,
+    .activities-table td {
+        padding: 6px 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        text-align: left;
+    }
+
+    /* Randiga rader */
+    .activities-table tbody tr:nth-child(even) {
+        background-color: #fbf8ee;
+    }
+
+    
+    .activities-table tbody tr:hover {
+        background-color: #f3eee0;
+    }
+
+    /* Sista kolumnen (Edit/Delete) högerställd */
+    .activities-table th:last-child,
+    .activities-table td:last-child {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    
+    .activities-table td.text-muted {
+        color: #888;
+    }

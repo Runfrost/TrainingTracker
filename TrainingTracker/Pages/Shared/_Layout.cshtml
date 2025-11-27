@@ -6,52 +6,75 @@
     <title>@ViewData["Title"] - TrainingTracker</title>
     <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/superhero/bootstrap.min.css" rel="stylesheet">
+    @*  Så att man kan använda bootstrap ikoner *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TrainingTracker.styles.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
 </head>
+
+
+@* Jag tog bort headern och la in en sidomeny istället  *@
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">TrainingTracker</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+    
+    <div class="layout">
+
+        @* Menyn på vänstra sidan *@
+        <div class="layout-sidebar">
+            
+            <div class="sidebar-logo">
+                <img src="~/images/tti.png" alt="TrainingTracker Logo" class="sidebar-logo-image" />
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+
+            <a class="sidebar-link" asp-page="/Index">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="sidebar-link" asp-page="/Activities">
+                <i class="bi bi-list-check"></i>
+                <span>Activities</span>
+            </a>
+
+            <a class="sidebar-link" asp-page="/ImportData">
+                <i class="bi bi-upload"></i>
+                <span>Import</span>
+            </a>
+
+            <a class="sidebar-link" asp-page="/Settings">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </a>
+
+          
+            <a class="sidebar-link" asp-area="Identity" asp-page="/Account/Logout">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <span>Logout</span>
+            </a>
+
+        </div>
+
+         <div class="layout-content">
+             <main role="main">
+                 @RenderBody()
+             </main>
+
+           
+         </div>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - TrainingTracker - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
     }
 </body>
-</html>
+
