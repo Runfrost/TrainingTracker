@@ -32,6 +32,15 @@
                        placeholder="Name" />
             </div>
 
+            <div class="mb-2">
+                
+                <input asp-for="Activity.ActivityDate"
+                       class="form-control activities-input"
+                       type="date" />
+                <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
+            </div>
+
+
             <div class="mb-3">
                 <input asp-for="Activity.Distance"
                        class="form-control activities-input"
