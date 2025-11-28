@@ -16,7 +16,6 @@
         <!-- FORM: samma backend-fält, bara lite snyggare -->
         <form method="post">
             <input asp-for="Activity.Id" type="hidden" />
-            <input asp-for="Activity.ActivityDate" type="hidden" />
 
             <div class="mb-2">
                 <select asp-for="Activity.Type"
@@ -35,8 +34,7 @@
             <div class="mb-2">
                 
                 <input asp-for="Activity.ActivityDate"
-                       class="form-control activities-input"
-                       type="date" />
+                       class="form-control activities-input" />
                 <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
             </div>
 

@@ -11,5 +11,7 @@
         // Running-specific props
         public int? TotalTimeInSeconds { get; set; }
         public int? AverageCadence { get; set; }
+
+        public string? UserId { get; set; }
     }
 }

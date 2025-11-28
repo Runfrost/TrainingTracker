@@ -46,7 +46,8 @@ namespace TrainingTracker.Pages
                 Activity.Type = activity.Type;
                 Activity.ActivityDate = activity.ActivityDate;
             }
-            Activities = await _api.GetAllActivities();
+            var userId = _userManager.GetUserId(User);
+            Activities = await _api.GetAllActivities(userId);
 
             ActivityTypes = new List<SelectListItem>
             {
@@ -63,7 +64,8 @@ namespace TrainingTracker.Pages
             if (!ModelState.IsValid)
             {
                 // Re-populate Activities and ActivityTypes before returning
-                Activities = await _api.GetAllActivities();
+                var userId = _userManager.GetUserId(User);
+                Activities = await _api.GetAllActivities(userId);
                 ActivityTypes = new List<SelectListItem>
             {
                 new SelectListItem { Value = "Running", Text = "Running" },

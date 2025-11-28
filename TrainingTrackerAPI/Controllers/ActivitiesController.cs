@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TrainingTrackerAPI.Data;
 using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
@@ -89,10 +91,12 @@ namespace TrainingTrackerAPI.Controllers
             return Ok();
         }
 
+        
         [HttpGet]
-        public async Task<IActionResult> GetAllActivities()
+        public async Task<IActionResult> GetAllActivitiesByUserId([FromQuery] string userId)
         {
             var activities = await _context.Activities
+                .Where(a => a.UserId == userId)
                 .Select(a => new ActivityDto
                 {
                     Id = a.Id,
@@ -100,7 +104,7 @@ namespace TrainingTrackerAPI.Controllers
                     Name = a.Name,
                     Distance = a.Distance,
                     ActivityDate = a.ActivityDate,
-
+                    //UserId = a.UserId,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
 
 
