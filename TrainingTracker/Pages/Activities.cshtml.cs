@@ -29,8 +29,40 @@ namespace TrainingTracker.Pages
 
         public List<ActivityViewModel> Activities { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public bool ShowCycling { get; set; } = true;
+        [BindProperty(SupportsGet = true)]
+        public bool ShowRunning { get; set; } = true;
+        [BindProperty(SupportsGet = true)]
+        public bool ShowWalking { get; set; } = true;
+
         public async Task OnGetAsync(int deleteId, int editId)
         {
+            var userId = _userManager.GetUserId(User);
+            var allActivities = await _api.GetAllActivities(userId);
+            Activities = allActivities;
+            var filteredActivites = new List<ActivityViewModel>();
+
+
+
+            if (ShowCycling)
+            {
+                filteredActivites = Activities.Where(a => a.Type == "Cycling").ToList();
+            }
+            if (ShowRunning)
+            {
+                filteredActivites.AddRange(Activities.Where(a => a.Type == "Running"));
+            }
+            if (ShowWalking)
+            {
+                filteredActivites.AddRange(Activities.Where(a => a.Type == "Walking"));
+            }
+
+            else
+            {
+                Activities = new List<ActivityViewModel>();
+            }
+            Activities = filteredActivites;
             if (deleteId != 0)
             {
                 await _api.DeleteActivity(deleteId);
@@ -46,8 +78,8 @@ namespace TrainingTracker.Pages
                 Activity.Type = activity.Type;
                 Activity.ActivityDate = activity.ActivityDate;
             }
-            var userId = _userManager.GetUserId(User);
-            Activities = await _api.GetAllActivities(userId);
+            
+            
 
             ActivityTypes = new List<SelectListItem>
             {
@@ -95,7 +127,7 @@ namespace TrainingTracker.Pages
 
 
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Activities");
 
 
 

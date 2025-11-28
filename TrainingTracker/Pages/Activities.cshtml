@@ -41,15 +41,26 @@
 
             <div class="mb-3">
                 <input asp-for="Activity.Distance"
-                       class="form-control activities-input"
-                       placeholder="Distance" />
+                    type="number"
+                    class="form-control activities-input"
+                       step="0.1"
+                    placeholder="Distance" />
             </div>
 
             <button type="submit" class="activities-btn">
                 Add activity
             </button>
-        </form>
 
+            
+        </form>
+        <form method="get">
+            <input type="checkbox" asp-for="ShowCycling" onchange="this.form.submit()" />
+            <label asp-for="ShowCycling" class="text-black">Show Cycling</label>
+            <input type="checkbox" asp-for="ShowRunning" onchange="this.form.submit()" />
+            <label asp-for="ShowRunning" class="text-black">Show Running</label>
+            <input type="checkbox" asp-for="ShowWalking" onchange="this.form.submit()" />
+            <label asp-for="ShowWalking" class="text-black">Show Walking</label>
+        </form>
 
 
 
