@@ -20,7 +20,8 @@ namespace TrainingTracker.Tests
         public async Task HealthCheck_ReturnSuccess_AndJSON()
         {
             //Arrange
-            var requestUri = "/api/activities";
+            var userId = "test-user-id";
+            var requestUri = $"/api/activities?userId={userId}";
 
             //Act
             var response = await _httpClient.GetAsync(requestUri);

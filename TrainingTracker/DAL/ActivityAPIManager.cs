@@ -29,11 +29,11 @@ namespace TrainingTracker.DAL
             }
         }
 
-        public async Task<List<ActivityViewModel>> GetAllActivities()
+        public async Task<List<ActivityViewModel>> GetAllActivities(string userid)
         {
             try
             {
-                var activities = await _http.GetFromJsonAsync<List<ActivityViewModel>>("/api/Activities");
+                var activities = await _http.GetFromJsonAsync<List<ActivityViewModel>>($"/api/Activities?userId={userid}");
                 return activities ?? new List<ActivityViewModel>();
             }
             catch(Exception ex)
