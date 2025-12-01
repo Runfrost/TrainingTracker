@@ -16,7 +16,11 @@
 
         <form method="post">
 
-            <input asp-for="ApplicationUser.Name" type="hidden" />
+            <input asp-for="UserSettings.Name" type="hidden" />
+            <div class="mb-2">
+                <input asp-for="UserSettings.Name"
+                       class="form-control settings-input"
+                       placeholder="Name" />
         </form>
 
     </div>
