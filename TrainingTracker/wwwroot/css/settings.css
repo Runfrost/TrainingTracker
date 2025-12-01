@@ -57,3 +57,21 @@
     font-size: 14px;
     color: #6b7280;
 }
+
+.settings-btn {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 7px 26px;
+    font-size: 15px;
+    font-weight: 500;
+    background-color: #F27F31;
+    border: 1px solid #F27F31;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .settings-btn:hover {
+        background-color: #E06F22;
+        border-color: #E06F22;
+    }

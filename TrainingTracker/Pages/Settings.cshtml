@@ -16,7 +16,26 @@
 
         <form method="post">
 
-            <input asp-for="ApplicationUser.Name" type="hidden" />
+            <div class="mb-2">
+                <input asp-for="UserSettings.Name"
+                       class="form-control settings-input"
+                       placeholder="Name" />
+            </div>
+
+
+            <select asp-for="UserSettings.YearOfBirth"
+                    asp-items="Model.YearOptions"
+                    class="form-control activities-input">
+                <option value="">Year of Birth</option>
+            </select>
+
+            <span asp-validation-for="UserSettings.YearOfBirth" class="text-danger"></span>
+
+
+            <button type="submit" class="settings-btn">
+                Save Settings
+            </button>
+
         </form>
 
     </div>
