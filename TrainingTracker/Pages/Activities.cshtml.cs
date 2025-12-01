@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using TrainingTracker.ViewModel;
 using TrainingTracker.DAL;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace TrainingTracker.Pages
 {
@@ -30,17 +31,19 @@ namespace TrainingTracker.Pages
 
         public List<ActivityViewModel> Activities { get; set; }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ShowRunning { get; set; } = true;
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ShowWalking { get; set; } = true;
 
         [BindProperty(SupportsGet = true)]
-        public string SortColumn { get; set; }
+        [ValidateNever]
+        public string SortColumn { get; set; } = "";
 
         [BindProperty(SupportsGet = true)]
+        [ValidateNever]
         public bool SortDescending { get; set; } = false;
 
         public async Task OnGetAsync(int deleteId, int editId)
@@ -64,8 +67,14 @@ namespace TrainingTracker.Pages
                     Activity.ActivityDate = activity.ActivityDate;
                 }
             }
+
+            if(string.IsNullOrEmpty(SortColumn))
+            {
+                SortColumn = "Date";
+                SortDescending = true;
+            }
+
             await LoadFiltersAsync();
-            LoadActivityTypes();
 
             Activities = SortColumn switch
             {
@@ -75,6 +84,8 @@ namespace TrainingTracker.Pages
                 "Date" => SortDescending ? Activities.OrderByDescending(a => a.ActivityDate).ToList() : Activities.OrderBy(a => a.ActivityDate).ToList(),
                 _ => Activities
             };
+            
+            LoadActivityTypes();
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {
@@ -84,6 +95,7 @@ namespace TrainingTracker.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            
             if (!ModelState.IsValid)
             {
                 await LoadFiltersAsync();

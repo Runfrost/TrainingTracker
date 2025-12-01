@@ -16,40 +16,42 @@
         <!-- FORM: samma backend-fält, bara lite snyggare -->
         <form method="post">
             <input asp-for="Activity.Id" type="hidden" />
-
+            <input asp-for="SortColumn" type="hidden" />
+            <input asp-for="SortDescending" type="hidden" />
             <div class="mb-2">
                 <select asp-for="Activity.Type"
-                        asp-items="Model.ActivityTypes"
-                        class="form-select activities-input">
+                asp-items="Model.ActivityTypes"
+                class="form-select activities-input">
                     <option value="">Select activity type</option>
                 </select>
             </div>
 
             <div class="mb-2">
                 <input asp-for="Activity.Name"
-                       class="form-control activities-input"
-                       placeholder="Name" />
+                class="form-control activities-input"
+                placeholder="Name" />
             </div>
 
             <div class="mb-2">
-                
+
                 <input asp-for="Activity.ActivityDate"
-                       class="form-control activities-input" />
+                class="form-control activities-input" />
                 <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
             </div>
 
 
             <div class="mb-3">
                 <input asp-for="Activity.Distance"
-                    type="number"
-                    class="form-control activities-input"
-                       step="0.1"
-                    placeholder="Distance" />
+                type="number"
+                class="form-control activities-input"
+                step="0.1"
+                placeholder="Distance" />
             </div>
 
             <button type="submit" class="activities-btn">
-                Add activity
+                @(Model.Activity.Id == null ? "Add activity" : "Update activity")
             </button>
+
 
             
         </form>
@@ -77,16 +79,16 @@
                     <tr>
                         @* <th>ID</th> *@
                         <th>
-                            <a asp-page="./activities" asp-route-sortcolumn="Type" asp-route-SortDescending="@(Model.SortColumn == "Type" ? !Model.SortDescending : false)">Type</a>
+                            <a asp-page="./activities" asp-route-SortColumn="Type" asp-route-SortDescending="@(Model.SortColumn == "Type" ? !Model.SortDescending : false)">Type</a>
                         </th>
                         <th>
-                            <a asp-page="./activities" asp-route-sortcolumn="Title" asp-route-SortDescending="@(Model.SortColumn == "Title" ? !Model.SortDescending : false)">Title</a>
+                            <a asp-page="./activities" asp-route-SortColumn="Title" asp-route-SortDescending="@(Model.SortColumn == "Title" ? !Model.SortDescending : false)">Title</a>
                         </th>
                         <th>          
-                            <a asp-page="./activities" asp-route-sortcolumn="Distance" asp-route-SortDescending="@(Model.SortColumn == "Distance" ? !Model.SortDescending : false)">Distance</a>
+                            <a asp-page="./activities" asp-route-SortColumn="Distance" asp-route-SortDescending="@(Model.SortColumn == "Distance" ? !Model.SortDescending : false)">Distance</a>
                         </th>
                         <th>
-                            <a asp-page="./activities" asp-route-sortcolumn="Date" asp-route-SortDescending="@(Model.SortColumn == "Date" ? !Model.SortDescending : false)">Date</a>
+                            <a asp-page="./activities" asp-route-SortColumn="Date" asp-route-SortDescending="@(Model.SortColumn == "Date" ? !Model.SortDescending : false)">Date</a>
                         </th>
                         <th></th>
                     </tr>
