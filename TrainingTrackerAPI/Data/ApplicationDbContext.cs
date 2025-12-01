@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TrainingTrackerAPI.Models;
 
@@ -17,6 +16,11 @@ namespace TrainingTrackerAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.Entity<ApplicationUser>()
+            .Property(u => u.Gender)
+            .HasConversion<string>();
 
             // Configure Table-Per-Hierarchy (TPH) inheritance
             modelBuilder.Entity<Activity>()

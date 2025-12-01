@@ -8,7 +8,7 @@ public class ApplicationUser : IdentityUser
     public int? YearOfBirth { get; set; }
     public double? Weight { get; set; }
     public double? Height { get; set; }
-    public GenderType? gender { get; set; }
+    public GenderType? Gender { get; set; }
 
 }
 
