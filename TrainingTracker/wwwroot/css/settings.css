@@ -41,3 +41,19 @@
     font-size: 14px;
     border-top: 4px solid #F27F31;
 }
+
+
+.settings-title {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #020617;
+}
+
+
+.settings-intro {
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #6b7280;
+}
