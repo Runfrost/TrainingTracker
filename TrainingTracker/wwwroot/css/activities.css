@@ -1,10 +1,21 @@
 ﻿.pill-fixed {
-    min-width: 4em;
+    min-width: 5em;
     display: inline-flex;
     justify-content: center;
     align-items: center; 
     text-align: center;
     font-weight: 900;
+}
+
+.pill-activity-type {
+    min-width: 1em;
+    min-height: 1em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: 900;
+    font-size: xx-large;
 }
 
 .layout-content {

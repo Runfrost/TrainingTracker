@@ -32,14 +32,15 @@ namespace TrainingTracker.Pages
         public ViewModel.ActivityViewModel Activity { get; set; } = new();
 
         public List<ActivityViewModel> Activities { get; set; }
-        public int TotalActivitiesThisWeek { get; set; }
-        public int TotalActivitiesPreviousWeek { get; set; }
-        public int TotalActivitiesThisMonth { get; set; }
-        public int TotalActivitiesPreviousMonth { get; set; }
-        public double TotalDistanceThisWeek { get; set; }
-        public double TotalDistancePreviousWeek { get; set; }
-        public double TotalDistanceThisMonth { get; set; }
-        public double TotalDistancePreviousMonth { get; set; }
+        public ActivityTotals ActivityTotal { get; set; } = new();
+        //public int TotalActivitiesThisWeek { get; set; }
+        //public int TotalActivitiesPreviousWeek { get; set; }
+        //public int TotalActivitiesThisMonth { get; set; }
+        //public int TotalActivitiesPreviousMonth { get; set; }
+        //public double TotalDistanceThisWeek { get; set; }
+        //public double TotalDistancePreviousWeek { get; set; }
+        //public double TotalDistanceThisMonth { get; set; }
+        //public double TotalDistancePreviousMonth { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
@@ -95,19 +96,19 @@ namespace TrainingTracker.Pages
                 "Date" => SortDescending ? Activities.OrderByDescending(a => a.ActivityDate).ToList() : Activities.OrderBy(a => a.ActivityDate).ToList(),
                 _ => Activities
             };
-            CalculateTotals();
+            ActivityTotal = CalculateTotalsToClass();
             LoadActivityTypes();
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {
             await LoadFiltersAsync();
-            CalculateTotals();
+            ActivityTotal = CalculateTotalsToClass();
             LoadActivityTypes();
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            CalculateTotals();
+            
             if (!ModelState.IsValid)
             {
                 await LoadFiltersAsync();
@@ -156,57 +157,73 @@ namespace TrainingTracker.Pages
 
             Activities = filtered;
         }
-        public void CalculateTotals()
+        //public void CalculateTotals()
+        //{
+        //    int currentWeek = ISOWeek.GetWeekOfYear(DateTime.Now);
+        //    int previousWeek = ISOWeek.GetWeekOfYear(DateTime.Now.AddDays(-7));
+
+        //    int currentMonth = DateTime.Now.Month;
+        //    int previousMonth = DateTime.Now.AddMonths(-1).Month;
+
+        //    //Vecka
+        //    var weekActivities = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == currentWeek);
+        //    var prevWeekActivities = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeek);
+
+        //    TotalActivitiesThisWeek = weekActivities.Count();
+        //    TotalActivitiesPreviousWeek = prevWeekActivities.Count();
+
+        //    TotalDistanceThisWeek = weekActivities.Sum(a => a.Distance);
+        //    TotalDistancePreviousWeek = prevWeekActivities.Sum(a => a.Distance);
+
+        //    //Månad
+        //    var monthActivities = Activities.Where(a => a.ActivityDate.Month == currentMonth);
+        //    var prevMonthActivities = Activities.Where(a => a.ActivityDate.Month == previousMonth);
+
+        //    TotalActivitiesThisMonth = monthActivities.Count();
+        //    TotalActivitiesPreviousMonth = prevMonthActivities.Count();
+
+        //    TotalDistanceThisMonth = monthActivities.Sum(a => a.Distance);
+        //    TotalDistancePreviousMonth = prevMonthActivities.Sum(a => a.Distance);
+        //}
+
+        public ActivityTotals CalculateTotalsToClass()
         {
-            var totalActivitiesThisWeek = Activities
-                .Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == ISOWeek.GetWeekOfYear(DateTime.Now)).ToList();
-            var totalActivitiesPreviousWeek = Activities
-                .Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == ISOWeek.GetWeekOfYear(DateTime.Now.AddDays(-7))).ToList();
+            var now = DateTime.Now;
 
-            TotalActivitiesThisWeek = totalActivitiesThisWeek.Count;
-            TotalDistancePreviousWeek = totalActivitiesPreviousWeek.Count;
+            var thisWeekNumber = ISOWeek.GetWeekOfYear(now);
+            var previousWeekNumber = ISOWeek.GetWeekOfYear(now.AddDays(-7));
+            var thisMonth = now.Month;
+            var previousMonth = now.AddMonths(-1).Month;
 
-            double weeklyDistance = 0;
-            double previousWeeklyDistance = 0;
-
-            foreach (var act in totalActivitiesThisWeek)
+            var totals = new ActivityTotals
             {
-                weeklyDistance += act.Distance;
-            }
-            foreach (var act in totalActivitiesPreviousWeek)
-            {
-                previousWeeklyDistance += act.Distance;
-            }
+                TotalActivitiesThisWeek = Activities.Count(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber),
+                TotalActivitiesPreviousWeek = Activities.Count(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber),
+                TotalDistanceThisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber)
+                                                  .Sum(a => a.Distance),
+                TotalDistancePreviousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber)
+                                                      .Sum(a => a.Distance),
+                TotalActivitiesThisMonth = Activities.Count(a => a.ActivityDate.Month == thisMonth),
+                TotalActivitiesPreviousMonth = Activities.Count(a => a.ActivityDate.Month == previousMonth),
+                TotalDistanceThisMonth = Activities.Where(a => a.ActivityDate.Month == thisMonth)
+                                                   .Sum(a => a.Distance),
+                TotalDistancePreviousMonth = Activities.Where(a => a.ActivityDate.Month == previousMonth)
+                                                       .Sum(a => a.Distance)
+            };
 
-            TotalDistanceThisWeek = weeklyDistance;
-            TotalDistancePreviousWeek = previousWeeklyDistance;
+            return totals;
+        }
 
-
-
-            // Totala träningspass per månad
-            var totalActivitiesThisMonth = Activities
-                .Where(a => a.ActivityDate.Month == DateTime.Now.Month).ToList();
-
-            var totalActivitiesPreviousMonth = Activities
-                .Where(a => a.ActivityDate.Month == DateTime.Now.AddMonths(-1).Month).ToList();
-
-            TotalActivitiesThisMonth = totalActivitiesThisMonth.Count();
-            TotalDistancePreviousMonth = totalActivitiesPreviousMonth.Count();
-
-            double monthlyDistance = 0;
-            double previousMonthlyDistance = 0;
-
-            foreach (var act in totalActivitiesThisMonth)
-            {
-                monthlyDistance += act.Distance;
-            }
-            foreach (var act in totalActivitiesPreviousMonth)
-            {
-                previousMonthlyDistance += act.Distance;
-            }
-
-            TotalDistanceThisMonth = monthlyDistance;
-            TotalDistancePreviousMonth = previousMonthlyDistance;
+        public class ActivityTotals
+        {
+            public int TotalActivitiesThisWeek { get; set; }
+            public int TotalActivitiesPreviousWeek { get; set; }
+            public double TotalDistanceThisWeek { get; set; }
+            public double TotalDistancePreviousWeek { get; set; }
+            public int TotalActivitiesThisMonth { get; set; }
+            public int TotalActivitiesPreviousMonth { get; set; }
+            public double TotalDistanceThisMonth { get; set; }
+            public double TotalDistancePreviousMonth { get; set; }
         }
 
     }
