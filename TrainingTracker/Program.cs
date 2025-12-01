@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrainingTracker.DAL;
 using TrainingTrackerAPI.Data;
+using TrainingTrackerAPI.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
