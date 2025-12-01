@@ -1,3 +1,4 @@
+using TrainingTrackerAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,9 +14,9 @@ namespace TrainingTracker.Pages
         private readonly HttpClient _http;
         private readonly ActivityAPIManager _api;
         private readonly ILogger<IndexModel> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ActivitiesModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<IdentityUser> user)
+        public ActivitiesModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user)
         {
             _logger = logger;
             _http = factory.CreateClient("Backend");

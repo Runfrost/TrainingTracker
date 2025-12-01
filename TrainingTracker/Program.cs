@@ -21,8 +21,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 errorNumbersToAdd: null);
         }));
 
-// Identity kopplad till v�r DbContext
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+// Identity kopplad till vår DbContext
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
