@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TrainingTracker.FitConversion;
+using TrainingTracker.Service;
 
 namespace TrainingTracker.ViewModel
 {
@@ -20,5 +22,8 @@ namespace TrainingTracker.ViewModel
         public int TotalTimeInSeconds { get; set; }
 
         public string? UserId { get; set; }
+
+
+        public double CaloriesBurnt => CalorieService.CalculateCalories(70, TotalTimeInSeconds, FitSport.Running);
     }
 }

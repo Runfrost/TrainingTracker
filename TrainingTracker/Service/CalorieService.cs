@@ -4,7 +4,7 @@ namespace TrainingTracker.Service
 {
     public class CalorieService
     {
-        public double CalculateCalories(double weight, double duration, FitSport activity)
+        public static double CalculateCalories(double weight, double duration, FitSport activity)
         {
             double met = activity switch
             {

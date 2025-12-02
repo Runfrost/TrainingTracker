@@ -33,14 +33,6 @@ namespace TrainingTracker.Pages
 
         public List<ActivityViewModel> Activities { get; set; }
         public ActivityTotals ActivityTotal { get; set; } = new();
-        //public int TotalActivitiesThisWeek { get; set; }
-        //public int TotalActivitiesPreviousWeek { get; set; }
-        //public int TotalActivitiesThisMonth { get; set; }
-        //public int TotalActivitiesPreviousMonth { get; set; }
-        //public double TotalDistanceThisWeek { get; set; }
-        //public double TotalDistancePreviousWeek { get; set; }
-        //public double TotalDistanceThisMonth { get; set; }
-        //public double TotalDistancePreviousMonth { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
@@ -208,7 +200,15 @@ namespace TrainingTracker.Pages
                 TotalDistanceThisMonth = Activities.Where(a => a.ActivityDate.Month == thisMonth)
                                                    .Sum(a => a.Distance),
                 TotalDistancePreviousMonth = Activities.Where(a => a.ActivityDate.Month == previousMonth)
-                                                       .Sum(a => a.Distance)
+                                                       .Sum(a => a.Distance),
+                TotalCaloriesBurntThisMonth = Activities.Where(a => a.ActivityDate.Month == thisMonth)
+                                                       .Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntPreviousMonth = Activities.Where(a => a.ActivityDate.Month == previousMonth)
+                                                       .Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntThisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber)
+                                                       .Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntPreviousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber)
+                                                       .Sum(a => a.CaloriesBurnt),
             };
 
             return totals;
@@ -216,6 +216,10 @@ namespace TrainingTracker.Pages
 
         public class ActivityTotals
         {
+            public double TotalCaloriesBurntPreviousWeek { get; set; }
+            public double TotalCaloriesBurntThisWeek { get; set; }
+            public double TotalCaloriesBurntPreviousMonth { get; set; }
+            public double TotalCaloriesBurntThisMonth { get; set; }
             public int TotalActivitiesThisWeek { get; set; }
             public int TotalActivitiesPreviousWeek { get; set; }
             public double TotalDistanceThisWeek { get; set; }

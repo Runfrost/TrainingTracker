@@ -1,4 +1,6 @@
 ﻿@page
+@using TrainingTracker.FitConversion
+@using TrainingTracker.Service
 @model ActivitiesModel
 @{
     ViewData["Title"] = "Activities";
@@ -111,7 +113,7 @@
                             <td>@activity.Name</td>
                             <td>@activity.Distance</td>
                             <td>@activity.ActivityDate</td>
-                            <td>@activity.TotalTimeInSeconds</td>
+                            <td>@CalorieService.CalculateCalories(70, activity.TotalTimeInSeconds, FitSport.Running).ToString("F0")</td>
                             <td>
                                 <a asp-route-editId="@activity.Id">Edit</a>
                                 &nbsp;|&nbsp;
@@ -194,12 +196,12 @@
                             <td>Trained time</td>
                         </tr>
                         <tr>
-                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
-                                Calories
+                            <td class="@(Model.ActivityTotal.TotalCaloriesBurntThisWeek >= Model.ActivityTotal.TotalCaloriesBurntPreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.ActivityTotal.TotalCaloriesBurntThisWeek.ToString("F0")
                             </td>
 
                             <td class="text-center">
-                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                @if (Model.ActivityTotal.TotalCaloriesBurntThisWeek >= Model.ActivityTotal.TotalCaloriesBurntPreviousWeek)
                                 {
                                     <i class="bi bi-caret-up-fill text-success"></i>
                                 }
@@ -208,7 +210,7 @@
                                     <i class="bi bi-caret-down-fill text-danger"></i>
                                 }
                             </td>
-                            <td>Calories</td>
+                            <td>@Model.ActivityTotal.TotalCaloriesBurntPreviousWeek.ToString("F0")</td>
                         </tr>
 
                         <tr>
@@ -271,12 +273,12 @@
                             <td>Trained time</td>
                         </tr>
                         <tr>
-                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
-                                Calories
+                            <td class="@(Model.ActivityTotal.TotalCaloriesBurntThisMonth >= Model.ActivityTotal.TotalCaloriesBurntPreviousMonth ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.ActivityTotal.TotalCaloriesBurntThisMonth.ToString("F0")
                             </td>
 
                             <td class="text-center">
-                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                @if (Model.ActivityTotal.TotalCaloriesBurntThisMonth >= Model.ActivityTotal.TotalCaloriesBurntPreviousMonth)
                                 {
                                     <i class="bi bi-caret-up-fill text-success"></i>
                                 }
@@ -285,7 +287,7 @@
                                     <i class="bi bi-caret-down-fill text-danger"></i>
                                 }
                             </td>
-                            <td>Calories</td>
+                            <td>@Model.ActivityTotal.TotalCaloriesBurntPreviousMonth.ToString("F0")</td>
                         </tr>
                     </tbody>
                 </table>
