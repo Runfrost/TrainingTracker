@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using TrainingTracker.DAL;
 using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
 
@@ -19,7 +18,8 @@ namespace TrainingTracker.Pages
         [BindProperty]
         public UserSettingsDto UserSettings { get; set; }
         public List<SelectListItem> YearOptions { get; set; }
-       
+        public List<SelectListItem> GenderOption { get; set; }
+
         public void BuildYearOptions()
         {
             var currentYear = DateTime.UtcNow.Year;
@@ -33,12 +33,26 @@ namespace TrainingTracker.Pages
                     Text = year.ToString()
                 });
             }
+
+        }
+        public void BuildGenderOption()
+        {
+            GenderOption = new List<SelectListItem>();
+            foreach (GenderType gender in Enum.GetValues(typeof(GenderType)))
+            {
+                GenderOption.Add(new SelectListItem
+                {
+                    Value = gender.ToString(),
+                    Text = gender.ToString()
+                });
+            }
         }
         public async Task OnGetAsync()
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 BuildYearOptions();
+                BuildGenderOption();
                 var user = await _userManager.GetUserAsync(User);
                 UserSettings = new UserSettingsDto
                 {
@@ -46,6 +60,7 @@ namespace TrainingTracker.Pages
                     YearOfBirth = user?.YearOfBirth,
                     Weight = user?.Weight,
                     Height = user?.Height,
+                    gender = user?.Gender,
                 };
             }
             else
@@ -53,7 +68,7 @@ namespace TrainingTracker.Pages
                 UserSettings = null;
             }
 
-           
+
 
 
         }
@@ -63,7 +78,8 @@ namespace TrainingTracker.Pages
 
             if (!ModelState.IsValid)
             {
-                BuildYearOptions();     
+                BuildYearOptions();
+                BuildGenderOption();
                 return Page();
             }
             if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -75,6 +91,7 @@ namespace TrainingTracker.Pages
                     user.YearOfBirth = userSettings.YearOfBirth;
                     user.Weight = userSettings.Weight;
                     user.Height = userSettings.Height;
+                    user.Gender = userSettings.gender;
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
@@ -92,6 +109,6 @@ namespace TrainingTracker.Pages
             return Page();
         }
 
-        
+
     }
 }

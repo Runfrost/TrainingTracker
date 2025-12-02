@@ -4,7 +4,7 @@
     ViewData["Title"] = "Settings";
 }
 
-<div class ="settings-background">
+<div class="settings-background">
 
     <div class="settings-panel">
 
@@ -27,9 +27,34 @@
                     asp-items="Model.YearOptions"
                     class="form-control activities-input">
                 <option value="">Year of Birth</option>
+                </select>
+           
+            <select asp-for="UserSettings.gender"
+                    asp-items="Model.GenderOption"
+                    class="form-control activities-input">
+                <option value="">gender</option>
             </select>
+   
+            <div class="mb-2">
+                <input asp-for="UserSettings.Height"
+                       type="number"
+                       class="form-control settings-input"
+                       placeholder="Length"
+                       min="100"
+                       max="250" />
+            </div>
+            <div class="mb-2">
+                <input asp-for="UserSettings.Weight"
+                       type="number"
+                       class="form-control settings-input"
+                       placeholder="Weight"
+                       min="30"
+                       max="250" />
+            </div>
+
 
             <span asp-validation-for="UserSettings.YearOfBirth" class="text-danger"></span>
+            <span asp-validation-for="UserSettings.gender" class="text-danger"></span>
 
 
             <button type="submit" class="settings-btn">
