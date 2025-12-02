@@ -58,13 +58,13 @@
 
         <form method="post" asp-page-handler="Filter">
             <input type="checkbox" asp-for="ShowCycling" onchange="this.form.submit()" hidden />
-            <label asp-for="ShowCycling" class="text-black rounded rounded-4 border border-1 btn @(Model.ShowCycling ? "btn-primary" : "btn-outline-primary")">🚴</label>
+            <label asp-for="ShowCycling" class="badge rounded-pill pill-activity-type btn @(Model.ShowCycling ? "btn-primary" : "btn-outline-primary")">🚴</label>
 
             <input type="checkbox" asp-for="ShowRunning" onchange="this.form.submit()" hidden />
-            <label asp-for="ShowRunning" class="text-black rounded rounded-5 border border-dark btn @(Model.ShowRunning ? "btn-primary" : "btn-outline-primary")">🏃</label>
+            <label asp-for="ShowRunning" class="badge rounded-pill pill-activity-type btn @(Model.ShowRunning ? "btn-primary" : "btn-outline-primary")">🏃</label>
 
             <input type="checkbox" asp-for="ShowWalking" onchange="this.form.submit()" hidden />
-            <label asp-for="ShowWalking" class="text-black rounded rounded-3 border btn @(Model.ShowWalking ? "btn-primary" : "btn-outline-primary")">🚶</label>
+            <label asp-for="ShowWalking" class="badge rounded-pill pill-activity-type btn @(Model.ShowWalking ? "btn-primary" : "btn-outline-primary")">🚶</label>
         </form>
 
 
@@ -121,30 +121,165 @@
             <p class="activities-intro">
                 Statistics of training done recently
             </p>
-            <div>
-                <div class="mb-2 text-black">
-                    <label>Total activitites this week:</label>
-                    <br />
-                    <input asp-for="TotalActivitiesThisWeek" />
-                </div>
-                <div class="mb-2 text-black">
-                    <label>Total activitites this month:</label>
-                    <br />
-                    <input asp-for="TotalActivitiesThisMonth" />
-                </div>
-                <div class="mb-2 text-black">
-                    <label>Total distance this week:</label>
-                    <br />
-                    <input asp-for="TotalDistanceThisWeek" />
-                </div>
-                <div class="mb-2 text-black">
-                    <label>Total distance this month:</label>
-                    <br />
-                    <input asp-for="TotalDistanceThisMonth" />
-                </div>
+            <div class="trainingstats-table-wrapper">
+                <table class="activities-table">
+                    <thead>
+                        <tr>
+                            <th>This week</th>
+                            <th class="text-center">Trend</th>
+                            <th>Last week</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalActivitiesThisWeek >= Model.ActivityTotal.TotalActivitiesPreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.ActivityTotal.TotalActivitiesThisWeek
+                            </td>
 
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalActivitiesThisWeek >= Model.ActivityTotal.TotalActivitiesPreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>@Model.ActivityTotal.TotalActivitiesPreviousWeek</td>
+                        </tr>
+
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.ActivityTotal.TotalDistanceThisWeek km
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>@Model.ActivityTotal.TotalDistancePreviousWeek km</td>
+                        </tr>
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                Trained time
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>Trained time</td>
+                        </tr>
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                Calories
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>Calories</td>
+                        </tr>
+
+                        <tr>
+                            <th>This month</th>
+                            <th class="text-center">Trend</th>
+                            <th>Last month</th>
+                        </tr>
+
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalActivitiesThisMonth >= Model.ActivityTotal.TotalActivitiesPreviousMonth ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.ActivityTotal.TotalActivitiesThisMonth
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalActivitiesThisMonth >= Model.ActivityTotal.TotalActivitiesPreviousMonth)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>@Model.ActivityTotal.TotalActivitiesPreviousMonth</td>
+                            
+                        </tr>
+
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalDistanceThisMonth >= Model.ActivityTotal.TotalDistancePreviousMonth ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                @Model.ActivityTotal.TotalDistanceThisMonth km
+                            </td>
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalDistanceThisMonth >= Model.ActivityTotal.TotalDistancePreviousMonth)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>@Model.ActivityTotal.TotalDistancePreviousMonth km</td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                Trained time
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>Trained time</td>
+                        </tr>
+                        <tr>
+                            <td class="@(Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                Calories
+                            </td>
+
+                            <td class="text-center">
+                                @if (Model.ActivityTotal.TotalDistanceThisWeek >= Model.ActivityTotal.TotalDistancePreviousWeek)
+                                {
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                }
+                            </td>
+                            <td>Calories</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
         </div>
     </div>
 </div>

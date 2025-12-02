@@ -1,0 +1,41 @@
+﻿@page
+@model TrainingTracker.Pages.ImportModel
+@{
+    ViewData["Title"] = "Import FIT File";
+}
+<div class="settings-background">
+    <div class="settings-panel">
+
+        <h1 class="settings-title">Import FIT File</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="FitFile" accept=".fit" class="text-black" />
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+        <p class="settings-intro">
+            <div class="text-black">
+                @if (Model.Session != null)
+                {
+                    <p>Start time: @Model.Session.StartDateTime</p>
+                    <p>Total time: @Model.Session.TotalTimeHms</p>
+                    <p>Distance: @Model.Session.DistanceKm.ToString("0.00") km</p>
+                    <p>Avg speed: @Model.Session.AvgSpeedKmH.ToString("0.0") km/h</p>
+                    <p>Avg pace: @Model.Session.AvgPace</p>
+                    <p>Total calories: @Model.Session.TotalCalories kcal</p>
+                    <p>Sport: @Model.Session.SportEnum</p>
+                    <p>Avg power: @Model.Session.AvgPower W</p>
+                    <p>Avg HR: @Model.Session.AvgHeartRate bpm</p>
+                    <p>Avg cadence: @Model.Session.AvgCadenceActual</p>
+                }
+            </div>
+
+    </div>
+</div>
+@* @if (Model.JsonOutput != null)
+{
+    <h4>Session JSON Output</h4>
+    <pre>@Model.JsonOutput</pre>
+} *@
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/settings.css" />
+}
