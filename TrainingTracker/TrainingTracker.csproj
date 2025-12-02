@@ -12,6 +12,8 @@
 
 <ItemGroup>
 
+<PackageReference Include="Garmin.FIT.Sdk" Version="21.171.0" />
+
 <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
 
 <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.0" />
