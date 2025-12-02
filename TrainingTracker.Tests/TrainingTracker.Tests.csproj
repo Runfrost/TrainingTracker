@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TrainingTrackerAPI\TrainingTrackerAPI.csproj" />
+    <ProjectReference Include="..\TrainingTracker\TrainingTracker.csproj" />
   </ItemGroup>
 
   <ItemGroup>

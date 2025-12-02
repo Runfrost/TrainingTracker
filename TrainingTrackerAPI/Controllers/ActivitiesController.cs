@@ -31,7 +31,7 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = 0,
+                        TotalTimeInSeconds = newActivity.TotalTime,
                         AverageCadence = 0,
                         UserId = newActivity.UserId
                     };
@@ -43,7 +43,7 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = 0,
+                        TotalTimeInSeconds = newActivity.TotalTime,
                         UserId = newActivity.UserId
                     };
                     break;
@@ -54,7 +54,7 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = 0,
+                        TotalTimeInSeconds = newActivity.TotalTime,
                         UserId = newActivity.UserId
                         // Lägg till andra properties om du har dem, t.ex. AverageSpeed
                     };

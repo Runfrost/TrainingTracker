@@ -17,6 +17,9 @@ namespace TrainingTrackerAPI.DTO
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; }
         public string? UserId { get; set; }
+        public int TotalTime { get; set; }
+
+        public int TotalTimeInSeconds { get; set; }
 
         //public ApplicationUser User { get; set; }
     }

@@ -39,6 +39,12 @@
                 <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
             </div>
 
+            <div class="mb-3">
+                <input asp-for="Activity.TotalTime"
+                       type="number"
+                       class="form-control activities-input"
+                       placeholder="Total time" />
+            </div>
 
             <div class="mb-3">
                 <input asp-for="Activity.Distance"
@@ -90,6 +96,9 @@
                         <th>
                             <a asp-page="./activities" asp-route-SortColumn="Date" asp-route-SortDescending="@(Model.SortColumn == "Date" ? !Model.SortDescending : false)">Date</a>
                         </th>
+                        <th>
+                            Calories 
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -102,6 +111,7 @@
                             <td>@activity.Name</td>
                             <td>@activity.Distance</td>
                             <td>@activity.ActivityDate</td>
+                            <td>@activity.TotalTime</td>
                             <td>
                                 <a asp-route-editId="@activity.Id">Edit</a>
                                 &nbsp;|&nbsp;
