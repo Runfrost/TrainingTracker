@@ -18,7 +18,7 @@ namespace TrainingTrackerAPI.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateRunning([FromBody] DTO.ActivitesCreateDto newActivity)
+        public async Task<IActionResult> CreateActivity([FromBody] DTO.ActivitesCreateDto newActivity)
         {
             Activity activity = new();
             //activity.UserId = newActivity.UserId;
@@ -31,7 +31,7 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = newActivity.TotalTime,
+                        TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
                         TimeInput = newActivity.TimeInput,
                         CaloriesBurned = newActivity.Calories,
                         AverageCadence = 0,
@@ -46,7 +46,7 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = newActivity.TotalTime,
+                        TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
                         TimeInput = newActivity.TimeInput,
                         UserId = newActivity.UserId,
                         CaloriesBurned = newActivity.Calories,
@@ -60,7 +60,7 @@ namespace TrainingTrackerAPI.Controllers
                         Name = newActivity.Name,
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = newActivity.TotalTime,
+                        TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
                         TimeInput = newActivity.TimeInput,
                         UserId = newActivity.UserId,
                         CaloriesBurned = newActivity.Calories,
@@ -109,7 +109,7 @@ namespace TrainingTrackerAPI.Controllers
         {
             var activities = await _context.Activities
                 .Where(a => a.UserId == userId)
-                .Select(a => new ActivityDto
+                .Select(a => new ActivitesCreateDto
                 {
                     Id = a.Id,
                     Type = EF.Property<string>(a, "ActivityType"),
@@ -119,7 +119,7 @@ namespace TrainingTrackerAPI.Controllers
                     //UserId = a.UserId,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
-                    Calories = a.CaloriesBurned,
+                    Calories = a.CaloriesBurned ?? 0,
                     SportType = a.SportType,
 
 
@@ -140,7 +140,7 @@ namespace TrainingTrackerAPI.Controllers
         {
             var activity = await _context.Activities
                 .Where(a => a.Id == id)
-                .Select(a => new ActivityDto
+                .Select(a => new ActivitesCreateDto
                 {
                     Id = a.Id,
                     Type = EF.Property<string>(a, "ActivityType"),
@@ -149,7 +149,7 @@ namespace TrainingTrackerAPI.Controllers
                     ActivityDate = a.ActivityDate,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
-                    Calories = a.CaloriesBurned,
+                    Calories = a.CaloriesBurned ?? 0,
                     SportType = a.SportType,
                 })
                 .FirstOrDefaultAsync();

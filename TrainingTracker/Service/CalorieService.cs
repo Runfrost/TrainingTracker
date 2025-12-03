@@ -10,6 +10,7 @@ namespace TrainingTracker.Service
             double met = activity switch
             {
                 SportType.Generic => 3.5,
+                SportType.Walking => 3.5,
                 SportType.Running => 8.0,
                 SportType.Cycling => 10.0,
                 _ => 1.0

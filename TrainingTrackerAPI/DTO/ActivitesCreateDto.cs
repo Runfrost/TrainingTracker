@@ -1,28 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TrainingTrackerAPI.Models;
+﻿using TrainingTrackerAPI.Models;
 
 namespace TrainingTrackerAPI.DTO
 {
     public class ActivitesCreateDto
     {
         public int? Id { get; set; }
-        [Required(ErrorMessage = "A name is required for the activity")]
-        [StringLength(20, ErrorMessage = "Name is too long, limit is 20")]
-        public string Name { get; set; }
-        [Required]
-        [Range(0.1, 250, ErrorMessage = "Activity too short or too long (max 250km)")]
-        public double Distance { get; set; }
-        [Required(ErrorMessage = "Type of activity needs to be selected")]
         public string Type { get; set; }
-        [Required(ErrorMessage = "Date is required")]
+        public string Name { get; set; }
+        public double Distance { get; set; }
         public DateTime ActivityDate { get; set; }
         public string? UserId { get; set; }
-        public int TotalTime { get; set; }
-        public SportType SportType { get; set; }
+        public int TotalTimeInSeconds { get; set; }
         public TimeOnly TimeInput { get; set; }
         public double Calories { get; set; }
+        public SportType SportType { get; set; }
+        public int? AverageCadence { get; set; }
 
-        public int TotalTimeInSeconds { get; set; }
+
 
         //public ApplicationUser User { get; set; }
     }

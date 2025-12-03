@@ -20,7 +20,7 @@
             <input asp-for="Activity.Id" type="hidden" />
             <input asp-for="SortColumn" type="hidden" />
             <input asp-for="SortDescending" type="hidden" />
-            <input asp-for="Activity.Type" type="hidden" value="Running"/>
+            <input asp-for="Activity.Type" type="hidden" value="Running" />
             <div class="mb-2">
                 <select asp-for="Activity.SportType"
                         asp-items="Model.ActivityTypeItems"
@@ -43,18 +43,9 @@
                 <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
             </div>
 
-            @* <div class="mb-3">
-                <label asp-for="Activity.TotalTime" class="text-black ms-2"></label>
-                <input asp-for="Activity.TotalTime"
-                       type="number"
-                       class="form-control activities-input"
-                       placeholder="Total time" />
-            </div> *@
             <div class="mb-2">
                 <label asp-for="Activity.TimeInput" class="text-black ms-2"></label>
                 <input asp-for="Activity.TimeInput" type="time" step="1" class="form-control activities-input" />
-                @* <input type="number" step="1" />
-                <input type="number" step="1" /> *@
             </div>
 
             <div class="mb-3">
@@ -71,7 +62,6 @@
             </button>
 
 
-
         </form>
 
         <form method="post" asp-page-handler="Filter">
@@ -84,8 +74,6 @@
             <input type="checkbox" asp-for="ShowWalking" onchange="this.form.submit()" hidden />
             <label asp-for="ShowWalking" class="badge rounded-pill pill-activity-type btn @(Model.ShowWalking ? "btn-primary" : "btn-outline-primary")">🚶</label>
         </form>
-
-
 
 
         @* Tabellen med aktiviteter *@
@@ -112,7 +100,7 @@
                             Total time
                         </th>
                         <th>
-                            Calories 
+                            Calories
                         </th>
                         <th></th>
                     </tr>
@@ -127,7 +115,6 @@
                             <td>@activity.Distance</td>
                             <td>@activity.ActivityDate</td>
                             <td>@activity.TimeInput.ToString("HH:mm:ss")</td>
-                            @* <td>@CalorieService.CalculateCalories(70, activity.TotalTimeInSeconds, FitSport.Running).ToString("F0")</td> *@
                             <td>@activity.Calories?.ToString("F0")</td>
                             <td>
                                 <a asp-route-editId="@activity.Id">Edit</a>
@@ -161,9 +148,18 @@
                         @foreach (var row in Model.ActivityTotal.WeeklyRows)
                         {
                             <tr>
-                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
-                                    @row.ThisPeriod.ToString("F0") @row.Unit
-                                </td>
+                                @if (row.Unit == "s")
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @TimeSpan.FromSeconds(row.ThisPeriod).ToString(@"hh\:mm\:ss")
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @row.ThisPeriod.ToString("F0") @row.Unit
+                                    </td>
+                                }
 
                                 <td class="text-center">
                                     @if (row.IsUp)
@@ -176,7 +172,14 @@
                                     }
                                 </td>
 
-                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                @if (row.Unit == "s")
+                                {
+                                    <td>@TimeSpan.FromSeconds(row.PreviousPeriod).ToString(@"hh\:mm\:ss")</td>
+                                }
+                                else
+                                {
+                                    <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                }
                             </tr>
                         }
 
@@ -189,9 +192,20 @@
                         @foreach (var row in Model.ActivityTotal.MonthlyRows)
                         {
                             <tr>
-                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
-                                    @row.ThisPeriod.ToString("F0") @row.Unit
-                                </td>
+
+                                @if (row.Unit == "s")
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @TimeSpan.FromSeconds(row.ThisPeriod).ToString(@"hh\:mm\:ss")
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @row.ThisPeriod.ToString("F0") @row.Unit
+                                    </td>
+                                }
+
 
                                 <td class="text-center">
                                     @if (row.IsUp)
@@ -203,13 +217,18 @@
                                         <i class="bi bi-caret-down-fill text-danger"></i>
                                     }
                                 </td>
-
-                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                @if (row.Unit == "s")
+                                {
+                                    <td>@TimeSpan.FromSeconds(row.PreviousPeriod).ToString(@"hh\:mm\:ss")</td>
+                                }
+                                else
+                                {
+                                    <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                }
                             </tr>
                         }
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>

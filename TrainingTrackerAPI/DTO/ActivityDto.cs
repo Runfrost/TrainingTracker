@@ -9,13 +9,11 @@ namespace TrainingTrackerAPI.DTO
         public string Name { get; set; }
         public double Distance { get; set; }
         public DateTime ActivityDate { get; set; }
-
-        // Running-specific props
-        public int? TotalTimeInSeconds { get; set; }
-        public int? AverageCadence { get; set; }
-        public TimeOnly TimeInput { get; set; }
         public string? UserId { get; set; }
+        public int? TotalTimeInSeconds { get; set; }
+        public TimeOnly TimeInput { get; set; }
         public double? Calories { get; set; }
         public SportType SportType { get; set; }
+        public int? AverageCadence { get; set; }
     }
 }

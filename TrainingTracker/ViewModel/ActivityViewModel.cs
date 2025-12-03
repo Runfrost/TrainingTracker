@@ -17,16 +17,10 @@ namespace TrainingTracker.ViewModel
         public string Type { get; set; }
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; } = DateTime.Today;
-        public SportType SportType { get; set; }
-        public int TotalTime { get; set; }
-
         public TimeOnly TimeInput { get; set; }
+        public SportType SportType { get; set; }
         public int TotalTimeInSeconds { get; set; }
         public double? Calories { get; set; }
-
         public string? UserId { get; set; }
-
-
-        public double CaloriesBurnt => CalorieService.CalculateCalories(70, TotalTimeInSeconds, SportType.Running);
     }
 }

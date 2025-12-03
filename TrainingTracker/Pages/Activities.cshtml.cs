@@ -15,7 +15,6 @@ namespace TrainingTracker.Pages
 {
     public class ActivitiesModel : PageModel
     {
-        private readonly HttpClient _http;
         private readonly ActivityAPIManager _api;
         private readonly ILogger<IndexModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -23,7 +22,6 @@ namespace TrainingTracker.Pages
         public ActivitiesModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user)
         {
             _logger = logger;
-            _http = factory.CreateClient("Backend");
             _api = api;
             _userManager = user;
         }
@@ -37,8 +35,6 @@ namespace TrainingTracker.Pages
 
         public List<ActivityViewModel> Activities { get; set; }
         public ActivityTotals ActivityTotal { get; set; } = new();
-
-        //public FitSport ActivityType { get; set; } = new();
 
         [BindProperty(SupportsGet = true)]
         public bool ShowCycling { get; set; } = true;
@@ -99,71 +95,65 @@ namespace TrainingTracker.Pages
                 _ => Activities
             };
             ActivityTotal = CalculateTotalsToClass();
-            LoadActivityTypes();
+            LoadEnumList();
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {
             await LoadFiltersAsync();
             ActivityTotal = CalculateTotalsToClass();
-            LoadActivityTypes();
+            LoadEnumList();
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            var currentUser = _userManager.GetUserAsync(User).Result;
             Activity.Type = Activity.SportType.ToString();
             if (!ModelState.IsValid)
             {
                 await LoadFiltersAsync();
-                LoadActivityTypes();
+                LoadEnumList();
                 return Page();
             }
 
             if (Activity.Id == null)
             {
-                
-
                 Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
-                Activity.UserId = _userManager.GetUserId(User);
-                //TODO
-                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, Activity.SportType);
+
+                if(currentUser != null)
+                {
+                    Activity.UserId = currentUser.Id;
+                    Activity.Calories = CalorieService.CalculateCalories(currentUser.Weight ?? 0, Activity.TotalTimeInSeconds, Activity.SportType);
+                }
+                    
                 await _api.SaveActivity(Activity);
             }
             else
             {
                 Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
-                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, Activity.SportType);
+                if(currentUser != null)
+                    Activity.Calories = CalorieService.CalculateCalories(currentUser.Weight ?? 0, Activity.TotalTimeInSeconds, Activity.SportType);
                 await _api.UpdateActivity(Activity, (int)Activity.Id);
             }
 
             return RedirectToPage("./Activities");
         }
 
-        private void LoadActivityTypes()
-        {
-            SetEnumValues();
-            //ActivityTypes = new List<SelectListItem>
-            //{
-            //    new SelectListItem { Value = "Running", Text = "Running" },
-            //    new SelectListItem { Value = "Walking", Text = "Walking" },
-            //    new SelectListItem { Value = "Cycling", Text = "Cycling" }
-            //};
-        }
-
         private async Task LoadFiltersAsync()
         {
             var userId = _userManager.GetUserId(User);
+            
             var allActivities = await _api.GetAllActivities(userId);
 
             var filtered = new List<ActivityViewModel>();
 
             if (ShowCycling)
-                filtered.AddRange(allActivities.Where(a => a.Type == "Cycling"));
+                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Cycling));
 
             if (ShowRunning)
-                filtered.AddRange(allActivities.Where(a => a.Type == "Running"));
+                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Running));
 
             if (ShowWalking)
-                filtered.AddRange(allActivities.Where(a => a.Type == "Walking"));
+                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Walking));
 
             Activities = filtered;
         }
@@ -215,6 +205,10 @@ namespace TrainingTracker.Pages
             public double TotalDurationThisWeek { get; set; }
             public double TotalDurationPreviousMonth { get; set; }
             public double TotalDurationThisMonth { get; set; }
+            //public string? TotalDurationPreviousWeek { get; set; }
+            //public string? TotalDurationThisWeek { get; set; }
+            //public string? TotalDurationPreviousMonth { get; set; }
+            //public string? TotalDurationThisMonth { get; set; }
             public double TotalCaloriesBurntPreviousWeek { get; set; }
             public double TotalCaloriesBurntThisWeek { get; set; }
             public double TotalCaloriesBurntPreviousMonth { get; set; }
@@ -249,6 +243,7 @@ namespace TrainingTracker.Pages
         public class MetricRow
         {
             public string Label { get; set; } = "";
+            //public string DurationThisPeriod { get; set; } = "";
             public double ThisPeriod { get; set; }
             public double PreviousPeriod { get; set; }
 
@@ -257,7 +252,7 @@ namespace TrainingTracker.Pages
             public string Unit { get; set; } = ""; // optional, e.g. "km"
         }
 
-        public void SetEnumValues()
+        public void LoadEnumList()
         {
             ActivityTypeItems = Enum.GetValues(typeof(ViewModel.SportType))
                 .Cast<ViewModel.SportType>()
