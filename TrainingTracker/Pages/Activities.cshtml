@@ -21,8 +21,8 @@
             <input asp-for="SortColumn" type="hidden" />
             <input asp-for="SortDescending" type="hidden" />
             <div class="mb-2">
-                <select asp-for="Activity.Type"
-                        asp-items="Model.ActivityTypes"
+                <select asp-for="Activity.ActivityType"
+                        asp-items="Model.ActivityTypeItems"
                         class="form-select activities-input">
                     <option value="">Select activity type</option>
                 </select>

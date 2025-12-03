@@ -17,7 +17,7 @@ namespace TrainingTracker.ViewModel
         public string Type { get; set; }
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; } = DateTime.Today;
-
+        public ActivityType ActivityType { get; set; }
         public int TotalTime { get; set; }
 
         public TimeOnly TimeInput { get; set; }
