@@ -110,6 +110,7 @@ namespace TrainingTracker.Pages
 
             if (Activity.Id == null)
             {
+                Activity.TotalTime = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
                 Activity.UserId = _userManager.GetUserId(User);
                 await _api.SaveActivity(Activity);
             }
@@ -149,34 +150,6 @@ namespace TrainingTracker.Pages
 
             Activities = filtered;
         }
-        //public void CalculateTotals()
-        //{
-        //    int currentWeek = ISOWeek.GetWeekOfYear(DateTime.Now);
-        //    int previousWeek = ISOWeek.GetWeekOfYear(DateTime.Now.AddDays(-7));
-
-        //    int currentMonth = DateTime.Now.Month;
-        //    int previousMonth = DateTime.Now.AddMonths(-1).Month;
-
-        //    //Vecka
-        //    var weekActivities = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == currentWeek);
-        //    var prevWeekActivities = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeek);
-
-        //    TotalActivitiesThisWeek = weekActivities.Count();
-        //    TotalActivitiesPreviousWeek = prevWeekActivities.Count();
-
-        //    TotalDistanceThisWeek = weekActivities.Sum(a => a.Distance);
-        //    TotalDistancePreviousWeek = prevWeekActivities.Sum(a => a.Distance);
-
-        //    //Månad
-        //    var monthActivities = Activities.Where(a => a.ActivityDate.Month == currentMonth);
-        //    var prevMonthActivities = Activities.Where(a => a.ActivityDate.Month == previousMonth);
-
-        //    TotalActivitiesThisMonth = monthActivities.Count();
-        //    TotalActivitiesPreviousMonth = prevMonthActivities.Count();
-
-        //    TotalDistanceThisMonth = monthActivities.Sum(a => a.Distance);
-        //    TotalDistancePreviousMonth = prevMonthActivities.Sum(a => a.Distance);
-        //}
 
         public ActivityTotals CalculateTotalsToClass()
         {
@@ -184,50 +157,87 @@ namespace TrainingTracker.Pages
 
             var thisWeekNumber = ISOWeek.GetWeekOfYear(now);
             var previousWeekNumber = ISOWeek.GetWeekOfYear(now.AddDays(-7));
+
             var thisMonth = now.Month;
             var previousMonth = now.AddMonths(-1).Month;
 
-            var totals = new ActivityTotals
-            {
-                TotalActivitiesThisWeek = Activities.Count(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber),
-                TotalActivitiesPreviousWeek = Activities.Count(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber),
-                TotalDistanceThisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber)
-                                                  .Sum(a => a.Distance),
-                TotalDistancePreviousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber)
-                                                      .Sum(a => a.Distance),
-                TotalActivitiesThisMonth = Activities.Count(a => a.ActivityDate.Month == thisMonth),
-                TotalActivitiesPreviousMonth = Activities.Count(a => a.ActivityDate.Month == previousMonth),
-                TotalDistanceThisMonth = Activities.Where(a => a.ActivityDate.Month == thisMonth)
-                                                   .Sum(a => a.Distance),
-                TotalDistancePreviousMonth = Activities.Where(a => a.ActivityDate.Month == previousMonth)
-                                                       .Sum(a => a.Distance),
-                TotalCaloriesBurntThisMonth = Activities.Where(a => a.ActivityDate.Month == thisMonth)
-                                                       .Sum(a => a.CaloriesBurnt),
-                TotalCaloriesBurntPreviousMonth = Activities.Where(a => a.ActivityDate.Month == previousMonth)
-                                                       .Sum(a => a.CaloriesBurnt),
-                TotalCaloriesBurntThisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber)
-                                                       .Sum(a => a.CaloriesBurnt),
-                TotalCaloriesBurntPreviousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber)
-                                                       .Sum(a => a.CaloriesBurnt),
-            };
+            var thisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber).ToList();
+            var previousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber).ToList();
 
-            return totals;
+            var thisMonthActs = Activities.Where(a => a.ActivityDate.Month == thisMonth).ToList();
+            var previousMonthActs = Activities.Where(a => a.ActivityDate.Month == previousMonth).ToList();
+
+            return new ActivityTotals
+            {
+                TotalActivitiesThisWeek = thisWeek.Count,
+                TotalDistanceThisWeek = thisWeek.Sum(a => a.Distance),
+                TotalCaloriesBurntThisWeek = thisWeek.Sum(a => a.CaloriesBurnt),
+                TotalDurationThisWeek = thisWeek.Sum(a => a.TotalTimeInSeconds),
+
+                TotalActivitiesPreviousWeek = previousWeek.Count,
+                TotalDistancePreviousWeek = previousWeek.Sum(a => a.Distance),
+                TotalCaloriesBurntPreviousWeek = previousWeek.Sum(a => a.CaloriesBurnt),
+                TotalDurationPreviousWeek = previousWeek.Sum(a => a.TotalTimeInSeconds),
+
+                TotalActivitiesThisMonth = thisMonthActs.Count,
+                TotalDistanceThisMonth = thisMonthActs.Sum(a => a.Distance),
+                TotalCaloriesBurntThisMonth = thisMonthActs.Sum(a => a.CaloriesBurnt),
+                TotalDurationThisMonth = thisMonthActs.Sum(a => a.TotalTimeInSeconds),
+
+                TotalActivitiesPreviousMonth = previousMonthActs.Count,
+                TotalDistancePreviousMonth = previousMonthActs.Sum(a => a.Distance),
+                TotalCaloriesBurntPreviousMonth = previousMonthActs.Sum(a => a.CaloriesBurnt),
+                TotalDurationPreviousMonth = previousMonthActs.Sum(a => a.TotalTimeInSeconds),
+
+            };
         }
 
         public class ActivityTotals
         {
+            public double TotalDurationPreviousWeek { get; set; }
+            public double TotalDurationThisWeek { get; set; }
+            public double TotalDurationPreviousMonth { get; set; }
+            public double TotalDurationThisMonth { get; set; }
             public double TotalCaloriesBurntPreviousWeek { get; set; }
             public double TotalCaloriesBurntThisWeek { get; set; }
             public double TotalCaloriesBurntPreviousMonth { get; set; }
             public double TotalCaloriesBurntThisMonth { get; set; }
             public int TotalActivitiesThisWeek { get; set; }
             public int TotalActivitiesPreviousWeek { get; set; }
-            public double TotalDistanceThisWeek { get; set; }
-            public double TotalDistancePreviousWeek { get; set; }
             public int TotalActivitiesThisMonth { get; set; }
             public int TotalActivitiesPreviousMonth { get; set; }
+            public double TotalDistanceThisWeek { get; set; }
+            public double TotalDistancePreviousWeek { get; set; }
             public double TotalDistanceThisMonth { get; set; }
             public double TotalDistancePreviousMonth { get; set; }
+
+            public List<MetricRow> WeeklyRows =>
+        new()
+        {
+            new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisWeek, PreviousPeriod = TotalActivitiesPreviousWeek },
+            new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisWeek, PreviousPeriod = TotalDistancePreviousWeek, Unit = "km" },
+            new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisWeek, PreviousPeriod = TotalDurationPreviousWeek, Unit = "s" },
+            new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisWeek, PreviousPeriod = TotalCaloriesBurntPreviousWeek, Unit = "cal" }
+        };
+
+            public List<MetricRow> MonthlyRows =>
+                new()
+                {
+            new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisMonth, PreviousPeriod = TotalActivitiesPreviousMonth },
+            new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisMonth, PreviousPeriod = TotalDistancePreviousMonth, Unit = "km" },
+            new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisMonth, PreviousPeriod = TotalDurationPreviousMonth, Unit = "s" },
+            new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisMonth, PreviousPeriod = TotalCaloriesBurntPreviousMonth, Unit = "cal" }
+                };
+        }
+        public class MetricRow
+        {
+            public string Label { get; set; } = "";
+            public double ThisPeriod { get; set; }
+            public double PreviousPeriod { get; set; }
+
+            public bool IsUp => ThisPeriod >= PreviousPeriod;
+
+            public string Unit { get; set; } = ""; // optional, e.g. "km"
         }
 
     }

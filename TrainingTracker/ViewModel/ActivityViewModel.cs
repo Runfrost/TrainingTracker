@@ -19,6 +19,8 @@ namespace TrainingTracker.ViewModel
         public DateTime ActivityDate { get; set; } = DateTime.Today;
 
         public int TotalTime { get; set; }
+
+        public TimeOnly TimeInput { get; set; }
         public int TotalTimeInSeconds { get; set; }
 
         public string? UserId { get; set; }
