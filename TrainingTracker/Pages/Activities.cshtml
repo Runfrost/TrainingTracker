@@ -127,7 +127,7 @@
                             <td>@activity.ActivityDate</td>
                             <td>@activity.TimeInput.ToString("HH:mm:ss")</td>
                             @* <td>@CalorieService.CalculateCalories(70, activity.TotalTimeInSeconds, FitSport.Running).ToString("F0")</td> *@
-                            <td>@activity.Calories</td>
+                            <td>@activity.Calories?.ToString("F0")</td>
                             <td>
                                 <a asp-route-editId="@activity.Id">Edit</a>
                                 &nbsp;|&nbsp;

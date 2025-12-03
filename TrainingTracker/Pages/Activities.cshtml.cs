@@ -74,6 +74,20 @@ namespace TrainingTracker.Pages
                     Activity.Type = activity.Type;
                     Activity.ActivityDate = activity.ActivityDate;
                     Activity.TimeInput = activity.TimeInput;
+                    switch (Activity.Type)
+                    {
+                        case "Running":
+                            ActivityType = FitSport.Running;
+                            break;
+                        case "Walking":
+                            ActivityType = FitSport.Generic;
+                            break;
+                        case "Cycling":
+                            ActivityType = FitSport.Cycling;
+                            break;
+                    }
+                    Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
+                    Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, ActivityType);
                 }
             }
 
@@ -134,13 +148,32 @@ namespace TrainingTracker.Pages
                         LoadActivityTypes();
                         return Page();
                 }
-                Activity.TotalTime = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
+                Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
                 Activity.UserId = _userManager.GetUserId(User);
                 Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, ActivityType);
                 await _api.SaveActivity(Activity);
             }
             else
             {
+                switch (Activity.Type)
+                {
+                    case "Running":
+                        ActivityType = FitSport.Running;
+                        break;
+                    case "Walking":
+                        ActivityType = FitSport.Generic;
+                        break;
+                    case "Cycling":
+                        ActivityType = FitSport.Cycling;
+                        break;
+                    default:
+                        ModelState.AddModelError("Activity.Type", "Unsupported activity type");
+                        await LoadFiltersAsync();
+                        LoadActivityTypes();
+                        return Page();
+                }
+                Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
+                Activity.Calories = CalorieService.CalculateCalories(70, Activity.TotalTimeInSeconds, ActivityType);
                 await _api.UpdateActivity(Activity, (int)Activity.Id);
             }
 
@@ -196,22 +229,22 @@ namespace TrainingTracker.Pages
             {
                 TotalActivitiesThisWeek = thisWeek.Count,
                 TotalDistanceThisWeek = thisWeek.Sum(a => a.Distance),
-                TotalCaloriesBurntThisWeek = thisWeek.Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntThisWeek = (double)thisWeek.Sum(a => a.Calories ?? 0),
                 TotalDurationThisWeek = thisWeek.Sum(a => a.TotalTimeInSeconds),
 
                 TotalActivitiesPreviousWeek = previousWeek.Count,
                 TotalDistancePreviousWeek = previousWeek.Sum(a => a.Distance),
-                TotalCaloriesBurntPreviousWeek = previousWeek.Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntPreviousWeek = (double)previousWeek.Sum(a => a.Calories ?? 0),
                 TotalDurationPreviousWeek = previousWeek.Sum(a => a.TotalTimeInSeconds),
 
                 TotalActivitiesThisMonth = thisMonthActs.Count,
                 TotalDistanceThisMonth = thisMonthActs.Sum(a => a.Distance),
-                TotalCaloriesBurntThisMonth = thisMonthActs.Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntThisMonth = (double)thisMonthActs.Sum(a => a.Calories ?? 0),
                 TotalDurationThisMonth = thisMonthActs.Sum(a => a.TotalTimeInSeconds),
 
                 TotalActivitiesPreviousMonth = previousMonthActs.Count,
                 TotalDistancePreviousMonth = previousMonthActs.Sum(a => a.Distance),
-                TotalCaloriesBurntPreviousMonth = previousMonthActs.Sum(a => a.CaloriesBurnt),
+                TotalCaloriesBurntPreviousMonth = (double)previousMonthActs.Sum(a => a.Calories ?? 0),
                 TotalDurationPreviousMonth = previousMonthActs.Sum(a => a.TotalTimeInSeconds),
 
             };

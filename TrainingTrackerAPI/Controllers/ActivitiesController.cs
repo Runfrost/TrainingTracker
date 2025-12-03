@@ -93,6 +93,7 @@ namespace TrainingTrackerAPI.Controllers
             activityToEdit.ActivityDate = editDto.ActivityDate;
             activityToEdit.TotalTimeInSeconds = editDto.TotalTimeInSeconds;
             activityToEdit.TimeInput = editDto.TimeInput;
+            activityToEdit.CaloriesBurned = editDto.Calories;
             //activityToEdit.AverageCadence = editDto.AverageCadence;
 
             await _context.SaveChangesAsync();
