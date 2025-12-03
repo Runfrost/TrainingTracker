@@ -4,39 +4,92 @@
     ViewData["Title"] = "Settings";
 }
 
-<div class ="settings-background">
+<div class="settings-background">
 
     <div class="settings-panel">
 
-        <h1 class="settings-title">Settings</h1>
+        <center>
+            <h1 class="settings-title">Settings</h1>
         <p class="settings-intro">
             Adjust your preferences below.
         </p>
+            </center>
 
-
+       
         <form method="post">
 
-            <div class="mb-2">
-                <input asp-for="UserSettings.Name"
-                       class="form-control settings-input"
-                       placeholder="Name" />
+            <div class="mb-2 row">
+                <label asp-for="UserSettings.Name"  class="col-sm-2 col-form-label settings-intro">
+                    Name
+                </label>
+                <div class="col-sm-8">
+                    <input asp-for="UserSettings.Name"
+                           class="form-control settings-input" />
+                </div>
             </div>
 
+            <div class="mb-2 row">
+                <label asp-for="UserSettings.YearOfBirth" class="col-sm-2 col-form-label settings-intro">
+                    Year of Birth
+                </label>
+                <div class="col-sm-8">
+                    <select asp-for="UserSettings.YearOfBirth"
+                            asp-items="Model.YearOptions"
+                            class="form-control activities-input">
+                        <option value="">Select...</option>
+                    </select>
+                    <span asp-validation-for="UserSettings.YearOfBirth" class="text-danger"></span>
+                </div>
+            </div>
 
-            <select asp-for="UserSettings.YearOfBirth"
-                    asp-items="Model.YearOptions"
-                    class="form-control activities-input">
-                <option value="">Year of Birth</option>
-            </select>
+            <div class="mb-2 row">
+                <label asp-for="UserSettings.gender" class="col-sm-2 col-form-label settings-intro">
+                    Gender
+                </label>
+                <div class="col-sm-8">
+                    <select asp-for="UserSettings.gender"
+                            asp-items="Model.GenderOption"
+                            class="form-control activities-input">
+                        <option value="">Select...</option>
+                    </select>
+                    <span asp-validation-for="UserSettings.gender" class="text-danger"></span>
+                </div>
+            </div>
 
-            <span asp-validation-for="UserSettings.YearOfBirth" class="text-danger"></span>
+            <div class="mb-2 row">
+                <label asp-for="UserSettings.Height" class="col-sm-2 col-form-label settings-intro">
+                    Length (cm)
+                </label>
+                <div class="col-sm-8">
+                    <input asp-for="UserSettings.Height"
+                           type="number"
+                           class="form-control settings-input"
+                           min="100"
+                           max="250" />
+                </div>
+            </div>
 
-
+            <div class="mb-2 row">
+                <label asp-for="UserSettings.Weight" class="col-sm-2 col-form-label settings-intro">
+                    Weight (kg)
+                </label>
+                <div class="col-sm-8">
+                    <input asp-for="UserSettings.Weight"
+                           type="number"
+                           class="form-control settings-input"
+                           min="30"
+                           max="250" />
+                </div>
+            </div>
+                
+            <center>
             <button type="submit" class="settings-btn">
                 Save Settings
             </button>
+                </center>
 
         </form>
+        
 
     </div>
 
