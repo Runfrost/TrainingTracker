@@ -22,7 +22,7 @@ namespace TrainingTracker.ViewModel
 
         public TimeOnly TimeInput { get; set; }
         public int TotalTimeInSeconds { get; set; }
-        public double Calories { get; set; }
+        public double? Calories { get; set; }
 
         public string? UserId { get; set; }
 
