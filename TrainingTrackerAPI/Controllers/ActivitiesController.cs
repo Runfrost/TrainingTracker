@@ -32,6 +32,8 @@ namespace TrainingTrackerAPI.Controllers
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = newActivity.TotalTime,
+                        TimeInput = newActivity.TimeInput,
+                        
                         AverageCadence = 0,
                         UserId = newActivity.UserId
                     };
@@ -44,6 +46,7 @@ namespace TrainingTrackerAPI.Controllers
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = newActivity.TotalTime,
+                        TimeInput = newActivity.TimeInput,
                         UserId = newActivity.UserId
                     };
                     break;
@@ -55,6 +58,7 @@ namespace TrainingTrackerAPI.Controllers
                         Distance = newActivity.Distance,
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = newActivity.TotalTime,
+                        TimeInput = newActivity.TimeInput,
                         UserId = newActivity.UserId
                         // Lägg till andra properties om du har dem, t.ex. AverageSpeed
                     };
@@ -85,6 +89,7 @@ namespace TrainingTrackerAPI.Controllers
             activityToEdit.Distance = editDto.Distance;
             activityToEdit.ActivityDate = editDto.ActivityDate;
             activityToEdit.TotalTimeInSeconds = editDto.TotalTimeInSeconds;
+            activityToEdit.TimeInput = editDto.TimeInput;
             //activityToEdit.AverageCadence = editDto.AverageCadence;
 
             await _context.SaveChangesAsync();
@@ -106,6 +111,8 @@ namespace TrainingTrackerAPI.Controllers
                     ActivityDate = a.ActivityDate,
                     //UserId = a.UserId,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
+                    TimeInput = a.TimeInput,
+
 
 
 
@@ -132,6 +139,7 @@ namespace TrainingTrackerAPI.Controllers
                     Distance = a.Distance,
                     ActivityDate = a.ActivityDate,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
+                    TimeInput = a.TimeInput,
                 })
                 .FirstOrDefaultAsync();
 

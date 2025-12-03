@@ -69,6 +69,7 @@ namespace TrainingTracker.Pages
                     Activity.Distance = activity.Distance;
                     Activity.Type = activity.Type;
                     Activity.ActivityDate = activity.ActivityDate;
+                    Activity.TimeInput = activity.TimeInput;
                 }
             }
 

@@ -12,6 +12,7 @@ namespace TrainingTrackerAPI.Models
         public int? MaxHeartRate { get; set; }
         public double Distance { get; set; }
         public int TotalTimeInSeconds { get; set; }
+        public TimeOnly TimeInput { get; set; }
         public int? CaloriesBurned { get; set; }
         public ApplicationUser? User { get; set; }
 
