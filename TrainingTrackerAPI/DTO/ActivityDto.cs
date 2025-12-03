@@ -13,5 +13,6 @@
         public int? AverageCadence { get; set; }
         public TimeOnly TimeInput { get; set; }
         public string? UserId { get; set; }
+        public double? Calories { get; set; }
     }
 }

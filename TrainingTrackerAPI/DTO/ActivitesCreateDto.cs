@@ -19,6 +19,7 @@ namespace TrainingTrackerAPI.DTO
         public string? UserId { get; set; }
         public int TotalTime { get; set; }
         public TimeOnly TimeInput { get; set; }
+        public double Calories { get; set; }
 
         public int TotalTimeInSeconds { get; set; }
 

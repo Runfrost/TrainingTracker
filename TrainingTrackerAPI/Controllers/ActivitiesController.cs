@@ -33,7 +33,8 @@ namespace TrainingTrackerAPI.Controllers
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = newActivity.TotalTime,
                         TimeInput = newActivity.TimeInput,
-                        
+                        CaloriesBurned = newActivity.Calories,
+
                         AverageCadence = 0,
                         UserId = newActivity.UserId
                     };
@@ -47,7 +48,8 @@ namespace TrainingTrackerAPI.Controllers
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = newActivity.TotalTime,
                         TimeInput = newActivity.TimeInput,
-                        UserId = newActivity.UserId
+                        UserId = newActivity.UserId,
+                        CaloriesBurned = newActivity.Calories,
                     };
                     break;
 
@@ -59,7 +61,8 @@ namespace TrainingTrackerAPI.Controllers
                         ActivityDate = newActivity.ActivityDate,
                         TotalTimeInSeconds = newActivity.TotalTime,
                         TimeInput = newActivity.TimeInput,
-                        UserId = newActivity.UserId
+                        UserId = newActivity.UserId,
+                        CaloriesBurned = newActivity.Calories,
                         // Lägg till andra properties om du har dem, t.ex. AverageSpeed
                     };
                     break;
@@ -112,6 +115,8 @@ namespace TrainingTrackerAPI.Controllers
                     //UserId = a.UserId,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
+                    Calories = a.CaloriesBurned,
+
 
 
 
@@ -140,6 +145,7 @@ namespace TrainingTrackerAPI.Controllers
                     ActivityDate = a.ActivityDate,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
+                    Calories = a.CaloriesBurned,
                 })
                 .FirstOrDefaultAsync();
 
