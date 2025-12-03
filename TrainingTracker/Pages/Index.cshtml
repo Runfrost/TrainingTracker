@@ -7,76 +7,87 @@
 <div class="index-background">
 
 
+    <div class="ms-2 activities-panel w-25">
 
+        <div>
+            <h1 class="activities-title">Training Stats</h1>
+            <p class="activities-intro">
+                Statistics of training done recently
+            </p>
+            <div class="trainingstats-table-wrapper">
+                <table class="activities-table">
+                    <thead>
+                        <tr>
+                            <th>This week</th>
+                            <th class="text-center">Trend</th>
+                            <th>Last week</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.ActivityTotal.WeeklyRows)
+                        {
+                            <tr>
+                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                    @row.ThisPeriod.ToString("F0") @row.Unit
+                                </td>
+
+                                <td class="text-center">
+                                    @if (row.IsUp)
+                                    {
+                                        <i class="bi bi-caret-up-fill text-success"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-caret-down-fill text-danger"></i>
+                                    }
+                                </td>
+
+                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <th>This month</th>
+                            <th class="text-center">Trend</th>
+                            <th>Last month</th>
+                        </tr>
+
+                        @foreach (var row in Model.ActivityTotal.MonthlyRows)
+                        {
+                            <tr>
+                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                    @row.ThisPeriod.ToString("F0") @row.Unit
+                                </td>
+
+                                <td class="text-center">
+                                    @if (row.IsUp)
+                                    {
+                                        <i class="bi bi-caret-up-fill text-success"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-caret-down-fill text-danger"></i>
+                                    }
+                                </td>
+
+                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
 
 
 </div>
 
 
 
-@* <div class="">
-    <form method="post">
-        <input asp-for="Activity.Id" type="hidden" />
-        
-        <label asp-for="Activity.Type"></label>
-        <br />
-        <select asp-for="Activity.Type" asp-items="Model.ActivityTypes">
-        <option value="">-- Välj aktivitetstyp --</option>
-        </select>
-        <br />
-        <span asp-validation-for="Activity.Type" class="text-danger"></span>
-        <br />
-        <label asp-for="Activity.Name"></label>
-        <br />
-        <input asp-for="Activity.Name" />
-        <br />
-        <span asp-validation-for="Activity.Name" class="text-danger"></span>
-        <br />
-        <label asp-for="Activity.ActivityDate"></label>
-        <br />
-        <input asp-for="Activity.ActivityDate" />
-        <br />
-        <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
-        <br />
-        <label asp-for="Activity.Distance"></label>
-        <br />
-        <input asp-for="Activity.Distance" type="number" step="0.1"/>
-        <br />
-        <span asp-validation-for="Activity.Distance" class="text-danger"></span>
-        <br />
-        <br />
-        <input type="submit" value="Lägg till aktivitet" />
-    </form>
-</div>
-<br />
-<table class="table table-striped">
-    <thead>Activities</thead>
-    <tr>
 
-        <td>ID</td>
-        <td>Type</td>
-        <td>Title</td>
-        <td>Distance</td>
-        <td>Date</td>
-    </tr>
-
-    @foreach (var activity in Model.Activities)
-
-    {
-        <tr>
-            <td>@activity.Id</td>
-            <td>@activity.Type</td>
-            <td>@activity.Name</td>
-            <td>@activity.Distance</td>
-            <td>@activity.ActivityDate</td>
-            <td><a asp-route-editId="@activity.Id">Edit</a></td>
-            <td><a asp-route-deleteId="@activity.Id">Delete</a></td>
-        </tr>
-
-    }
-
-</table>  *@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/activities.css" />
 }
