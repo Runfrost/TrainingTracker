@@ -7,16 +7,16 @@
 
 <div class="index-background">
 
-    <div class="ms-2 activities-panel w-25">
+    <div class="ms-2 calendar-size">
         <center>
-        <div class="calendar-panel">
+            <div class="calendar-panel">
             <h3>Kalender</h3>
             <div id="activity-calendar"></div>
         </div>
         </center>
         </div>
 
-    <div class="ms-2 activities-panel w-25">
+    <div class="ms-2 activities-panel">
 
         <div>
             <h1 class="activities-title">Training Stats</h1>
@@ -101,21 +101,53 @@
     <link rel="stylesheet" href="~/css/activities.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css" />
     <style>
-       
+        #activity-calendar {
+            width: 300px; /* or any width you prefer */
+            margin: 0 auto; /* CENTER the anchor */
+        }
         .activity-day {
             background-color: green !important; 
             color: white !important; 
             border-radius: 50% !important; 
         }
 
+        .calendar-size{
+            
+            width: 25vw;
+            height: 50vh;
+        }
+
+        
+
+        .activities-panel {
+            width: 25vw; 
+           /*  height: 50vh; */
+            min-width: 200px;
+            min-height: fit-content;
+        }
+
         
         .calendar-panel {
-            /*width: 300px;
-            min-height: 350px; */
+
+            text-align: center;
+            align-content: center;
             
             background: transparent;
             color: black;
         }
+
+        .datepicker {
+            
+            transform: scale(1.5);
+            transform-origin: top left;
+            align-content: center;
+        }
+
+        /* .datepicker-dropdown {
+            left: 50% !important;
+            transform: translateX(-50%) scale(1.4);
+            transform-origin: top center;
+        } */
     </style>
 
 }

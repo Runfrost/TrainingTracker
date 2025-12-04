@@ -47,8 +47,23 @@
     padding-top: 32px; 
 }
 
-
-
+.calendar-size {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(252, 248, 235, 0.96);
+    border-radius: 20px;
+    padding: 20px 24px 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    font-size: 14px;
+    border-top: 4px solid #F27F31;
+}
+@media(min-width: 768px)
+{
+    .calendar-size {
+        width: 60vw;
+        height: 50vh;
+    }
+}
 .activities-panel {
     width: 100%;
     max-width: 1000px;
