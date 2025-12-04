@@ -13,19 +13,14 @@ namespace TrainingTracker.ViewModel
         [Required]
         [Range(0.1, 250, ErrorMessage = "Activity too short or too long (max 250km)")]
         public double Distance { get; set; }
-        [Required(ErrorMessage = "Type of activity needs to be selected")]
+        //[Required(ErrorMessage = "Type of activity needs to be selected")]
         public string Type { get; set; }
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; } = DateTime.Today;
-
-        public int TotalTime { get; set; }
-
         public TimeOnly TimeInput { get; set; }
+        public SportType SportType { get; set; }
         public int TotalTimeInSeconds { get; set; }
-
+        public double? Calories { get; set; }
         public string? UserId { get; set; }
-
-
-        public double CaloriesBurnt => CalorieService.CalculateCalories(70, TotalTimeInSeconds, FitSport.Running);
     }
 }

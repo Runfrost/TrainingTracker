@@ -8,25 +8,28 @@ using TrainingTracker.DAL;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.Globalization;
+using TrainingTracker.Service;
+using TrainingTracker.FitConversion;
+using TrainingTrackerAPI.Services;
+using TrainingTracker.Models;
 
 namespace TrainingTracker.Pages
 {
     public class ActivitiesModel : PageModel
     {
-        private readonly HttpClient _http;
+        private readonly ActivitySummaryService _activitySummaryService;
         private readonly ActivityAPIManager _api;
         private readonly ILogger<IndexModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ActivitiesModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user)
+        public ActivitiesModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user, ActivitySummaryService activitySummaryService)
         {
             _logger = logger;
-            _http = factory.CreateClient("Backend");
             _api = api;
             _userManager = user;
+            _activitySummaryService = activitySummaryService;
         }
-
-        public List<SelectListItem> ActivityTypes { get; set; }
+        public IEnumerable<SelectListItem> SportTypeOptions { get; set; }
 
         [BindProperty]
         public ViewModel.ActivityViewModel Activity { get; set; } = new();
@@ -63,6 +66,7 @@ namespace TrainingTracker.Pages
                 var activity = await _api.GetActivity(editId);
                 if(activity.Id != 0)
                 {
+                    var currentUser = await GetCurrentUserAsync();
                     Activity = new();
                     Activity.Id = activity.Id;
                     Activity.Name = activity.Name;
@@ -70,6 +74,9 @@ namespace TrainingTracker.Pages
                     Activity.Type = activity.Type;
                     Activity.ActivityDate = activity.ActivityDate;
                     Activity.TimeInput = activity.TimeInput;
+                    Activity.SportType = activity.SportType;
+                    Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
+                    Activity.Calories = CalorieService.CalculateCalories(currentUser.Weight ?? 0, Activity.TotalTimeInSeconds, Activity.SportType);
                 }
             }
 
@@ -89,157 +96,82 @@ namespace TrainingTracker.Pages
                 "Date" => SortDescending ? Activities.OrderByDescending(a => a.ActivityDate).ToList() : Activities.OrderBy(a => a.ActivityDate).ToList(),
                 _ => Activities
             };
-            ActivityTotal = CalculateTotalsToClass();
-            LoadActivityTypes();
+            ActivityTotal = _activitySummaryService.CalculateActivityIntervals(Activities);
+            LoadEnumList();
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {
             await LoadFiltersAsync();
-            ActivityTotal = CalculateTotalsToClass();
-            LoadActivityTypes();
+            ActivityTotal = _activitySummaryService.CalculateActivityIntervals(Activities);
+            LoadEnumList();
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            
+            var currentUser = await GetCurrentUserAsync();
+            Activity.Type = Activity.SportType.ToString();
             if (!ModelState.IsValid)
             {
                 await LoadFiltersAsync();
-                LoadActivityTypes();
+                LoadEnumList();
                 return Page();
             }
 
             if (Activity.Id == null)
             {
-                Activity.TotalTime = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
-                Activity.UserId = _userManager.GetUserId(User);
+                Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
+
+                if(currentUser != null)
+                {
+                    Activity.UserId = currentUser.Id;
+                    Activity.Calories = CalorieService.CalculateCalories(currentUser.Weight ?? 0, Activity.TotalTimeInSeconds, Activity.SportType);
+                }
+                    
                 await _api.SaveActivity(Activity);
             }
             else
             {
+                Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
+                if(currentUser != null)
+                    Activity.Calories = CalorieService.CalculateCalories(currentUser.Weight ?? 0, Activity.TotalTimeInSeconds, Activity.SportType);
                 await _api.UpdateActivity(Activity, (int)Activity.Id);
             }
 
             return RedirectToPage("./Activities");
         }
 
-        private void LoadActivityTypes()
-        {
-            ActivityTypes = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Running", Text = "Running" },
-                new SelectListItem { Value = "Walking", Text = "Walking" },
-                new SelectListItem { Value = "Cycling", Text = "Cycling" }
-            };
-        }
-
         private async Task LoadFiltersAsync()
         {
             var userId = _userManager.GetUserId(User);
+            
             var allActivities = await _api.GetAllActivities(userId);
 
             var filtered = new List<ActivityViewModel>();
 
             if (ShowCycling)
-                filtered.AddRange(allActivities.Where(a => a.Type == "Cycling"));
+                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Cycling));
 
             if (ShowRunning)
-                filtered.AddRange(allActivities.Where(a => a.Type == "Running"));
+                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Running));
 
             if (ShowWalking)
-                filtered.AddRange(allActivities.Where(a => a.Type == "Walking"));
+                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Walking));
 
             Activities = filtered;
         }
-
-        public ActivityTotals CalculateTotalsToClass()
+        public void LoadEnumList()
         {
-            var now = DateTime.Now;
-
-            var thisWeekNumber = ISOWeek.GetWeekOfYear(now);
-            var previousWeekNumber = ISOWeek.GetWeekOfYear(now.AddDays(-7));
-
-            var thisMonth = now.Month;
-            var previousMonth = now.AddMonths(-1).Month;
-
-            var thisWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == thisWeekNumber).ToList();
-            var previousWeek = Activities.Where(a => ISOWeek.GetWeekOfYear(a.ActivityDate) == previousWeekNumber).ToList();
-
-            var thisMonthActs = Activities.Where(a => a.ActivityDate.Month == thisMonth).ToList();
-            var previousMonthActs = Activities.Where(a => a.ActivityDate.Month == previousMonth).ToList();
-
-            return new ActivityTotals
-            {
-                TotalActivitiesThisWeek = thisWeek.Count,
-                TotalDistanceThisWeek = thisWeek.Sum(a => a.Distance),
-                TotalCaloriesBurntThisWeek = thisWeek.Sum(a => a.CaloriesBurnt),
-                TotalDurationThisWeek = thisWeek.Sum(a => a.TotalTimeInSeconds),
-
-                TotalActivitiesPreviousWeek = previousWeek.Count,
-                TotalDistancePreviousWeek = previousWeek.Sum(a => a.Distance),
-                TotalCaloriesBurntPreviousWeek = previousWeek.Sum(a => a.CaloriesBurnt),
-                TotalDurationPreviousWeek = previousWeek.Sum(a => a.TotalTimeInSeconds),
-
-                TotalActivitiesThisMonth = thisMonthActs.Count,
-                TotalDistanceThisMonth = thisMonthActs.Sum(a => a.Distance),
-                TotalCaloriesBurntThisMonth = thisMonthActs.Sum(a => a.CaloriesBurnt),
-                TotalDurationThisMonth = thisMonthActs.Sum(a => a.TotalTimeInSeconds),
-
-                TotalActivitiesPreviousMonth = previousMonthActs.Count,
-                TotalDistancePreviousMonth = previousMonthActs.Sum(a => a.Distance),
-                TotalCaloriesBurntPreviousMonth = previousMonthActs.Sum(a => a.CaloriesBurnt),
-                TotalDurationPreviousMonth = previousMonthActs.Sum(a => a.TotalTimeInSeconds),
-
-            };
-        }
-
-        public class ActivityTotals
-        {
-            public double TotalDurationPreviousWeek { get; set; }
-            public double TotalDurationThisWeek { get; set; }
-            public double TotalDurationPreviousMonth { get; set; }
-            public double TotalDurationThisMonth { get; set; }
-            public double TotalCaloriesBurntPreviousWeek { get; set; }
-            public double TotalCaloriesBurntThisWeek { get; set; }
-            public double TotalCaloriesBurntPreviousMonth { get; set; }
-            public double TotalCaloriesBurntThisMonth { get; set; }
-            public int TotalActivitiesThisWeek { get; set; }
-            public int TotalActivitiesPreviousWeek { get; set; }
-            public int TotalActivitiesThisMonth { get; set; }
-            public int TotalActivitiesPreviousMonth { get; set; }
-            public double TotalDistanceThisWeek { get; set; }
-            public double TotalDistancePreviousWeek { get; set; }
-            public double TotalDistanceThisMonth { get; set; }
-            public double TotalDistancePreviousMonth { get; set; }
-
-            public List<MetricRow> WeeklyRows =>
-        new()
-        {
-            new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisWeek, PreviousPeriod = TotalActivitiesPreviousWeek },
-            new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisWeek, PreviousPeriod = TotalDistancePreviousWeek, Unit = "km" },
-            new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisWeek, PreviousPeriod = TotalDurationPreviousWeek, Unit = "s" },
-            new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisWeek, PreviousPeriod = TotalCaloriesBurntPreviousWeek, Unit = "cal" }
-        };
-
-            public List<MetricRow> MonthlyRows =>
-                new()
+            SportTypeOptions = Enum.GetValues(typeof(ViewModel.SportType))
+                .Cast<ViewModel.SportType>()
+                .Select(a => new SelectListItem
                 {
-            new MetricRow { Label = "Activities", ThisPeriod = TotalActivitiesThisMonth, PreviousPeriod = TotalActivitiesPreviousMonth },
-            new MetricRow { Label = "Distance", ThisPeriod = TotalDistanceThisMonth, PreviousPeriod = TotalDistancePreviousMonth, Unit = "km" },
-            new MetricRow { Label = "Duration", ThisPeriod = TotalDurationThisMonth, PreviousPeriod = TotalDurationPreviousMonth, Unit = "s" },
-            new MetricRow { Label = "Calories", ThisPeriod = TotalCaloriesBurntThisMonth, PreviousPeriod = TotalCaloriesBurntPreviousMonth, Unit = "cal" }
-                };
+                    Value = ((int)a).ToString(),
+                    Text = a.ToString()
+                });
         }
-        public class MetricRow
+        private Task<ApplicationUser> GetCurrentUserAsync()
         {
-            public string Label { get; set; } = "";
-            public double ThisPeriod { get; set; }
-            public double PreviousPeriod { get; set; }
-
-            public bool IsUp => ThisPeriod >= PreviousPeriod;
-
-            public string Unit { get; set; } = ""; // optional, e.g. "km"
+            return _userManager.GetUserAsync(User);
         }
-
     }
 }

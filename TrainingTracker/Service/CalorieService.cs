@@ -1,16 +1,18 @@
 ﻿using TrainingTracker.FitConversion;
+using TrainingTracker.ViewModel;
 
 namespace TrainingTracker.Service
 {
     public class CalorieService
     {
-        public static double CalculateCalories(double weight, double duration, FitSport activity)
+        public static double CalculateCalories(double weight, double duration, SportType activity)
         {
             double met = activity switch
             {
-                FitSport.Generic => 3.5,
-                FitSport.Running => 8.0,
-                FitSport.Cycling => 10.0,
+                SportType.Generic => 3.5,
+                SportType.Walking => 3.5,
+                SportType.Running => 8.0,
+                SportType.Cycling => 10.0,
                 _ => 1.0
             };
 

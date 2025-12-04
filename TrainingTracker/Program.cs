@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TrainingTracker.DAL;
 using TrainingTrackerAPI.Data;
 using TrainingTrackerAPI.Models;
+using TrainingTrackerAPI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,7 @@ builder.Services.AddHttpClient("Backend", client =>
 });
 
 builder.Services.AddScoped<ActivityAPIManager>();
+builder.Services.AddScoped<ActivitySummaryService>();
 
 
 builder.Services.AddRazorPages(options =>

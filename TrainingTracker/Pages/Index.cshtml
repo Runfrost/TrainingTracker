@@ -6,77 +6,20 @@
 
 <div class="index-background">
 
+    <h2>Träningskalender</h2>
 
-
-
+    <div id="calendar">
+        @foreach (var day in Enumerable.Range(0, 7).Select(i => DateTime.Today.AddDays(-i)))
+        {
+            var workout = Model.Workouts.FirstOrDefault(w => w.Date.Date == day.Date);
+            <div class="calendar-day @(workout != null ? "workout-day" : "")">
+                <strong>@day.ToString("ddd dd")</strong>
+                @if (workout != null)
+                {
+                    <div>@workout.Type</div>
+                }
+            </div>
+        }
+    </div>
 
 </div>
-
-
-
-@* <div class="">
-    <form method="post">
-        <input asp-for="Activity.Id" type="hidden" />
-        
-        <label asp-for="Activity.Type"></label>
-        <br />
-        <select asp-for="Activity.Type" asp-items="Model.ActivityTypes">
-        <option value="">-- Välj aktivitetstyp --</option>
-        </select>
-        <br />
-        <span asp-validation-for="Activity.Type" class="text-danger"></span>
-        <br />
-        <label asp-for="Activity.Name"></label>
-        <br />
-        <input asp-for="Activity.Name" />
-        <br />
-        <span asp-validation-for="Activity.Name" class="text-danger"></span>
-        <br />
-        <label asp-for="Activity.ActivityDate"></label>
-        <br />
-        <input asp-for="Activity.ActivityDate" />
-        <br />
-        <span asp-validation-for="Activity.ActivityDate" class="text-danger"></span>
-        <br />
-        <label asp-for="Activity.Distance"></label>
-        <br />
-        <input asp-for="Activity.Distance" type="number" step="0.1"/>
-        <br />
-        <span asp-validation-for="Activity.Distance" class="text-danger"></span>
-        <br />
-        <br />
-        <input type="submit" value="Lägg till aktivitet" />
-    </form>
-</div>
-<br />
-<table class="table table-striped">
-    <thead>Activities</thead>
-    <tr>
-
-        <td>ID</td>
-        <td>Type</td>
-        <td>Title</td>
-        <td>Distance</td>
-        <td>Date</td>
-    </tr>
-
-    @foreach (var activity in Model.Activities)
-
-    {
-        <tr>
-            <td>@activity.Id</td>
-            <td>@activity.Type</td>
-            <td>@activity.Name</td>
-            <td>@activity.Distance</td>
-            <td>@activity.ActivityDate</td>
-            <td><a asp-route-editId="@activity.Id">Edit</a></td>
-            <td><a asp-route-deleteId="@activity.Id">Delete</a></td>
-        </tr>
-
-    }
-
-</table>  *@
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/index.css" />
-}

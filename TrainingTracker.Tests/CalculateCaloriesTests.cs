@@ -22,7 +22,7 @@ namespace TrainingTracker.Tests
             double weight = 70; // in kg
             double duration = 3600; // in seconds
 
-            var activity = TrainingTracker.FitConversion.FitSport.Running;
+            var activity = TrainingTracker.ViewModel.SportType.Running;
 
             // Act
             double calories = CalorieService.CalculateCalories(weight, duration, activity);
