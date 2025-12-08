@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Routing.Constraints;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrainingTracker.Service;
+using TrainingTracker.ViewModel;
+using TrainingTrackerAPI.Models;
+using SportType = TrainingTracker.ViewModel.SportType;
 
 namespace TrainingTracker.Tests
 {
@@ -14,23 +18,43 @@ namespace TrainingTracker.Tests
         //{
         //    _calorieService = calorieService;
         //}
-        [Fact]
-        public void CalculateCalories_RunningActivity_ReturnsExpectedCalories()
+        [Theory]
+        [InlineData(70, 3600, SportType.Running, 560)]
+        [InlineData(80, 1800, SportType.Cycling, 400)]
+        [InlineData(60, 2700, SportType.Walking, 157.8)]
+        public void CalculateCalories_ValidActivity_ReturnsExpectedCalories(double weight, double duration, SportType activity, double expected)
         {
+
+
+
             // Arrange
             var calorieService = new CalorieService();
-            double weight = 70; // in kg
-            double duration = 3600; // in seconds
-
-            var activity = TrainingTracker.ViewModel.SportType.Running;
+       
 
             // Act
             double calories = CalorieService.CalculateCalories(weight, duration, activity);
 
             // Assert
-            double expectedCalories = 8.0 * weight * (duration / 3600.0); // MET for running is 8.0
-            Assert.Equal(expectedCalories, calories);
+            Assert.Equal(expected, calories, 0);
         }
 
+        
+
+        [Theory]
+        [InlineData(-70, 3600, SportType.Running)]
+        [InlineData(70, -3600, SportType.Cycling)]
+        [InlineData(251, 3600, SportType.Walking)]
+        [InlineData(29, 3600, SportType.Generic)]
+        [InlineData(70, 0, SportType.Running)]
+        [InlineData(70, 86400, SportType.Cycling)]
+
+        public void CalculateCalories_WithInvalidData_ReturnsZero(double weight, double duration, SportType activity)
+        {
+            var calorieService = new CalorieService();
+
+            double calories = CalorieService.CalculateCalories(weight, duration, activity);
+
+            Assert.Equal(0, calories);
+        } 
     }
 }
