@@ -30,7 +30,7 @@ jobs:
       - name: Run tests
         id: test
         run: |
-          dotnet test --no-restore > testlog.txt || true
+          dotnet test --no-restore --logger "console;verbosity=normal" > testlog.txt || true
 
           PASSED=$(grep "Passed" '[0-9]\+ Passed' | awk '{sum += $1} END {print sum+0}')
           FAILED=$(grep "Failed" '[0-9]\+ Failed' | awk '{sum += $1} END {print sum+0}')
@@ -42,10 +42,14 @@ jobs:
           USE_SQLITE: "true"
 
       - name: Notify Discord with test result
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          curl -X POST \
-               -H "Content-Type: application/json" \
-               -d "{\"content\": \"🧪 Tester körda!\n✅ Passed: ${{ steps.test.outputs.passed }}\n❌ Failed: ${{ steps.test.outputs.failed }}\"}" \
-               "$DISCORD_WEBHOOK_URL"
+          echo: "🧪 Tester körda!"
+          echo: "Passed: ${{ steps.test.outputs.passed }}"
+          echo: "Passed: ${{ steps.test.outputs.failed }}"
+        #env:
+          #DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        #run: |
+          #curl -X POST \
+               #-H "Content-Type: application/json" \
+               #-d "{\"content\": \"🧪 Tester körda!\n✅ Passed: ${{ steps.test.outputs.passed }}\n❌ Failed: ${{ steps.test.outputs.failed }}\"}" \
+               #"$DISCORD_WEBHOOK_URL"
