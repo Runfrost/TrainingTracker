@@ -43,14 +43,10 @@ jobs:
           USE_SQLITE: "true"
 
       - name: Notify Discord with test result
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          echo: "🧪 Tester körda!"
-          echo: "Passed: ${{ steps.test.outputs.passed }}"
-          echo: "Passed: ${{ steps.test.outputs.failed }}"
-        #env:
-          #DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        #run: |
-          #curl -X POST \
-               #-H "Content-Type: application/json" \
-               #-d "{\"content\": \"🧪 Tester körda!\n✅ Passed: ${{ steps.test.outputs.passed }}\n❌ Failed: ${{ steps.test.outputs.failed }}\"}" \
-               #"$DISCORD_WEBHOOK_URL"
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               -d "{\"content\": \"🧪 Tester körda!\n✅ Passed: ${{ steps.test.outputs.passed }}\n❌ Failed: ${{ steps.test.outputs.failed }}\"}" \
+               "$DISCORD_WEBHOOK_URL"
