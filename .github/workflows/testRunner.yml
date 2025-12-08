@@ -30,9 +30,10 @@ jobs:
       - name: Run tests
         id: test
         run: |
-          dotnet test --no-restore > testlog.txt || true
-          PASSED=$(grep -o '[0-9]\+ Passed' testlog.txt | awk '{sum += $1} END {print sum+0}')
-          FAILED=$(grep -o '[0-9]\+ Failed' testlog.txt | awk '{sum += $1} END {print sum+0}')
+          dotnet test --no-restore --logger "console;verbosity=normal" > testlog.txt || true
+          PASSED=$(awk '/Passed:/ {print $2}' testlog.txt)
+          FAILED=$(awk '/Failed:/ {print $2}' testlog.txt)
+          FAILED=${FAILED:-0}   # default to 0 if empty
           echo "passed=$PASSED" >> $GITHUB_OUTPUT
           echo "failed=$FAILED" >> $GITHUB_OUTPUT
           
