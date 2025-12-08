@@ -28,6 +28,24 @@ jobs:
         run: dotnet build
 
       - name: Run tests
-        run: dotnet test --no-restore --logger  "console;verbosity=minimal"
+        id: test
+        run: |
+          dotnet test --no-restore --logger "console;verbosity=minimal" > testlog.txt || true
+
+          PASSED=$(grep "Passed" testlog.txt | awk '{sum += $1} END {print sum+0}')
+          FAILED=$(grep "Failed" testlog.txt | awk '{sum += $1} END {print sum+0}')
+
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+          
         env:
           USE_SQLITE: "true"
+
+      - name: Notify Discord with test result
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+               -H "Content-Type: application/json" \
+               -d "{\"content\": \"🧪 Tester körda!\n✅ Passed: ${{ steps.test.outputs.passed }}\n❌ Failed: ${{ steps.test.outputs.failed }}\"}" \
+               "$DISCORD_WEBHOOK_URL"
