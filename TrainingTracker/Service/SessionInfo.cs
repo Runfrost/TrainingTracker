@@ -1,4 +1,6 @@
-﻿namespace TrainingTracker.FitConversion
+﻿using TrainingTracker.ViewModel;
+
+namespace TrainingTracker.Service
 {
     public class SessionInfo
     {
@@ -27,6 +29,6 @@
 
         public string AvgPace => FitHelpers.SpeedToPace(AvgSpeed);
 
-        public FitSport SportEnum => (FitSport)Sport;
+        public SportType SportEnum => (SportType)Sport;
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TrainingTracker.DAL;
+using TrainingTracker.Service;
 using TrainingTrackerAPI.Data;
 using TrainingTrackerAPI.Models;
 using TrainingTrackerAPI.Services;

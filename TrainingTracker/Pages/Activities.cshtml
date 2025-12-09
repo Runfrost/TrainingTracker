@@ -1,5 +1,4 @@
 ﻿@page
-@using TrainingTracker.FitConversion
 @using TrainingTracker.Service
 @model ActivitiesModel
 @{
@@ -33,6 +32,7 @@
                 <input asp-for="Activity.Name"
                        class="form-control activities-input"
                        placeholder="Activity name" />
+                <span asp-validation-for="Activity.Name" class="text-danger"></span>
             </div>
 
             <div class="mb-2">
@@ -45,6 +45,7 @@
             <div class="mb-2">
                 <label asp-for="Activity.TimeInput" class="text-black ms-2"></label>
                 <input asp-for="Activity.TimeInput" type="time" step="1" class="form-control activities-input" />
+                <span asp-validation-for="Activity.TimeInput" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
@@ -54,6 +55,7 @@
                        class="form-control activities-input"
                        step="0.1"
                        placeholder="Distance" />
+                <span asp-validation-for="Activity.Distance" class="text-danger"></span>
             </div>
         </form>
 

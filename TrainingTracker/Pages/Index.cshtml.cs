@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
-using TrainingTracker.DAL;
+using TrainingTracker.Service;
 using TrainingTracker.ViewModel;
 using TrainingTrackerAPI.Models;
 
 
-    public class IndexModel : PageModel
+public class IndexModel : PageModel
     {
         private readonly ActivityAPIManager _api;
         private readonly UserManager<ApplicationUser> _userManager;

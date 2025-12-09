@@ -10,12 +10,14 @@ namespace TrainingTracker.ViewModel
         [StringLength(20, ErrorMessage = "Name is too long, limit is 20")]
         public string Name { get; set; }
         [Required]
-        [Range(0.1, 250, ErrorMessage = "Activity too short or too long (max 250km)")]
+        [Range(0.1, 400, ErrorMessage = "Activity too short or too long (max 400km)")]
         public double Distance { get; set; }
         //[Required(ErrorMessage = "Type of activity needs to be selected")]
         public string Type { get; set; }
         [Required(ErrorMessage = "Date is required")]
         public DateTime ActivityDate { get; set; } = DateTime.Today;
+        [Required]
+        [Range(typeof(TimeOnly), "00:00:01", "23:59:59", ErrorMessage = "Activity needs to be of a format between 00:00:01 and 23:59:59")]
         public TimeOnly TimeInput { get; set; }
         public SportType SportType { get; set; }
         public int TotalTimeInSeconds { get; set; }

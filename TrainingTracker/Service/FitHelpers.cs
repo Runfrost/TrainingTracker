@@ -1,4 +1,6 @@
-﻿namespace TrainingTracker.FitConversion
+﻿using TrainingTracker.ViewModel;
+
+namespace TrainingTracker.Service
 {
     public static class FitHelpers
     {
@@ -17,9 +19,9 @@
         {
             return speedMps * 3.6;
         }
-        public static string AdjustedAvgCadence(int cadence, FitSport sport)
+        public static string AdjustedAvgCadence(int cadence, SportType sport)
         {
-            if (sport == FitSport.Running)
+            if (sport == SportType.Running)
             {
                 return $"{cadence * 2} spm"; // running cadence → steps per minute
             }

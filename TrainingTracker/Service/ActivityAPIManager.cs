@@ -5,7 +5,7 @@ using TrainingTrackerAPI.Models;
 using TrainingTracker.ViewModel;
 
 
-namespace TrainingTracker.DAL
+namespace TrainingTracker.Service
 {
     public class ActivityAPIManager
     {
@@ -14,7 +14,7 @@ namespace TrainingTracker.DAL
         {
             _http = factory.CreateClient("Backend");
         }
-        public async Task<ActivityViewModel> UploadActivity(TrainingTracker.FitConversion.SessionInfo activity)
+        public async Task<ActivityViewModel> UploadActivity(SessionInfo activity)
         {
             var response = await _http.PostAsJsonAsync("/api/Activities/Upload", activity);
             if (response.IsSuccessStatusCode)

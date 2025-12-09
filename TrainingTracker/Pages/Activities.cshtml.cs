@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TrainingTracker.ViewModel;
-using TrainingTracker.DAL;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.Globalization;
 using TrainingTracker.Service;
-using TrainingTracker.FitConversion;
 using TrainingTrackerAPI.Services;
 using TrainingTracker.Models;
 

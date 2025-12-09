@@ -12,19 +12,19 @@
                 <label asp-for="SessionTitle" class="text-black ms-2"></label>
                 <input asp-for="SessionTitle"
                        class="form-control activities-input" />
+                <span asp-validation-for="SessionTitle" class="text-danger"></span>
             </div>
             <input type="file" name="FitFile" accept=".fit" class="text-black" />
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
-        <p class="settings-intro">
-            <div class="text-black">
+            <div class="text-black import-info">
                 @if (Model.Session != null)
                 {
                     <h3>Uploaded Activity</h3>
                     <form method="post">
                         <div class="mb-2">
                             <label asp-for="Session.ActivityName" class="text-black ms-2"></label>
-                            <input asp-for="Session.ActivityName"
+                            <input asp-for="Session.ActivityName" disabled
                                    class="form-control activities-input" />
                         </div>
                         <div class="mb-2">
@@ -104,5 +104,5 @@
 } *@
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/settings.css" />
+    <link rel="stylesheet" href="~/css/import.css" />
 }

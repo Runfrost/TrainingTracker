@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dynastream.Fit;
 using System.Text.Json;
-using TrainingTracker.FitConversion;
-using TrainingTracker.DAL;
 using Microsoft.AspNetCore.Identity;
 using TrainingTracker.Models;
 using TrainingTrackerAPI.Models;
+using System.ComponentModel.DataAnnotations;
+using TrainingTracker.Service;
 
 namespace TrainingTracker.Pages
 {
@@ -25,23 +25,30 @@ namespace TrainingTracker.Pages
         public IFormFile? FitFile { get; set; }
 
         public string? JsonOutput { get; set; }
+
         [BindProperty]
+        [Required(ErrorMessage = "Session title is required.")]
         public string? SessionTitle { get; set; }
-        public TrainingTracker.FitConversion.SessionInfo? Session { get; set; }
+        public Service.SessionInfo? Session { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
             if (FitFile == null)
             {
                 JsonOutput = "No file uploaded.";
                 return Page();
             }
 
+
             using var stream = FitFile.OpenReadStream();
 
             JsonOutput = FitToJson.ExtractSessionToJson(stream);
 
             // JSON is an array ? so deserialize a list
-            var list = JsonSerializer.Deserialize<List<TrainingTracker.FitConversion.SessionInfo>>(JsonOutput);
+            var list = JsonSerializer.Deserialize<List<Service.SessionInfo>>(JsonOutput);
 
             Session = list?.FirstOrDefault();
             Session.ActivityName = SessionTitle;
