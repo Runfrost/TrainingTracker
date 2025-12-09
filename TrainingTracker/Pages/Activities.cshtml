@@ -1,5 +1,6 @@
 ﻿@page
 @using TrainingTracker.Service
+@using TrainingTracker.Models
 @model ActivitiesModel
 @{
     ViewData["Title"] = "Activities";
@@ -18,7 +19,7 @@
             <input asp-for="Activity.Id" type="hidden" />
             <input asp-for="SortColumn" type="hidden" value="Date" />
             <input asp-for="SortDescending" type="hidden" />
-            <input asp-for="Activity.Type" type="hidden" value="Running" />
+            @* <input asp-for="Activity.Type" type="hidden" value="Running" /> *@
             <div class="mb-2">
                 <select asp-for="Activity.SportType"
                         asp-items="Model.SportTypeOptions"
@@ -105,25 +106,20 @@
             <table class="activities-table">
                 <thead>
                     <tr>
-                       
-                        <th>
-                            <a asp-page="./activities" asp-route-SortColumn="Type" asp-route-SortDescending="@(Model.SortColumn == "Type" ? !Model.SortDescending : false)">Type</a>
-                        </th>
-                        <th>
-                            <a asp-page="./activities" asp-route-SortColumn="Title" asp-route-SortDescending="@(Model.SortColumn == "Title" ? !Model.SortDescending : false)">Title</a>
-                        </th>
-                        <th>
-                            <a asp-page="./activities" asp-route-SortColumn="Distance" asp-route-SortDescending="@(Model.SortColumn == "Distance" ? !Model.SortDescending : false)">Distance</a>
-                        </th>
-                        <th>
-                            <a asp-page="./activities" asp-route-SortColumn="Date" asp-route-SortDescending="@(Model.SortColumn == "Date" ? !Model.SortDescending : false)">Date</a>
-                        </th>
-                        <th>
-                            Total time
-                        </th>
-                        <th>
-                            Calories
-                        </th>
+                        @foreach (var field in Enum.GetValues<SortField>())
+                        {
+                            var display = ActivitiesModel.SortFieldDisplay[field];
+                            bool isSelected = Model.SortColumn == field;
+                            bool nextDescending = isSelected ? !Model.SortDescending : false;
+
+                            <th>
+                                <a asp-page="./activities"
+                                   asp-route-SortColumn="@field"
+                                   asp-route-SortDescending="@nextDescending">
+                                    @display
+                                </a>
+                            </th>
+                        }
                         <th></th>
                     </tr>
                 </thead>
