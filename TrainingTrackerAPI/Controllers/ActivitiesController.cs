@@ -20,68 +20,26 @@ namespace TrainingTrackerAPI.Controllers
         [HttpPost("Upload")]
         public async Task<IActionResult> UploadActivity([FromBody] SessionInfo sessionInfo)
         {
-            Activity activity = new();
-            //activity.UserId = newActivity.UserId;
             string[] formats = { "ss", "mm:ss", "hh:mm:ss" };
             TimeOnly timeResult = new();
             var success = TimeOnly.TryParseExact(sessionInfo.TotalTimeHms, formats, out var result);
             if(success)
-            {
                 timeResult = result;
-            }
 
-
-                switch (sessionInfo.Sport)
+            Activity activity = new Activity()
             {
-                case 1:
-                    activity = new Running
-                    {
-                        Name = sessionInfo.ActivityName ?? "New Run",
-                        Distance = sessionInfo.TotalDistance / 1000,
-                        ActivityDate = sessionInfo.StartDateTime,
-                        TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
-                        TimeInput = timeResult,
-                        CaloriesBurned = sessionInfo.TotalCalories,
-                        AverageCadence = sessionInfo.AvgCadence,
-                        UserId = sessionInfo.UserId,
-                        SportType = SportType.Running,
-                    };
-                    break;
-
-                case 7:
-                    activity = new Walking
-                    {
-                        Name = sessionInfo.ActivityName ?? "New Walk",
-                        Distance = sessionInfo.TotalDistance / 1000,
-                        ActivityDate = sessionInfo.StartDateTime,
-                        TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
-                        TimeInput = timeResult,
-                        CaloriesBurned = sessionInfo.TotalCalories,
-                        AverageCadence = sessionInfo.AvgCadence,
-                        UserId = sessionInfo.UserId,
-                        SportType = SportType.Walking,
-                    };
-                    break;
-
-                case 2:
-                    activity = new Cycling
-                    {
-                        Name = sessionInfo.ActivityName ?? "New Ride",
-                        Distance = sessionInfo.TotalDistance / 1000,
-                        ActivityDate = sessionInfo.StartDateTime,
-                        TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
-                        TimeInput = timeResult,
-                        CaloriesBurned = sessionInfo.TotalCalories,
-                        AvarageWatts = (int)sessionInfo.AvgPower,
-                        UserId = sessionInfo.UserId,
-                        SportType = SportType.Cycling,
-                        // Lägg till andra properties om du har dem, t.ex. AverageSpeed
-                    };
-                    break;
-
-                default:
-                    return BadRequest("Unsupported activity type");
-            }
+                Name = sessionInfo.ActivityName ?? "New Activity",
+                Distance = sessionInfo.DistanceKm,
+                ActivityDate = sessionInfo.StartDateTime,
+                TotalTimeInSeconds = (int)sessionInfo.TotalTimerTime,
+                AverageHeartRate = sessionInfo.AvgHeartRate,
+                TimeInput = timeResult,
+                CaloriesBurned = sessionInfo.TotalCalories,
+                AvgCadence = sessionInfo.AvgCadence,
+                AvgPower = sessionInfo.AvgPower,
+                UserId = sessionInfo.UserId,
+                SportType = sessionInfo.SportEnum,
+            };
 
             _context.Activities.Add(activity);
             await _context.SaveChangesAsync();
@@ -91,58 +49,18 @@ namespace TrainingTrackerAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateActivity([FromBody] DTO.ActivitesCreateDto newActivity)
         {
-            Activity activity = new();
-            //activity.UserId = newActivity.UserId;
-
-            switch (newActivity.Type)
+            Activity activity = new()
             {
-                case "Running":
-                    activity = new Running
-                    {
-                        Name = newActivity.Name,
-                        Distance = newActivity.Distance,
-                        ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
-                        TimeInput = newActivity.TimeInput,
-                        CaloriesBurned = newActivity.Calories,
-                        AverageCadence = 0,
-                        UserId = newActivity.UserId,
-                        SportType = newActivity.SportType,
-                    };
-                    break;
-
-                case "Walking":
-                    activity = new Walking
-                    {
-                        Name = newActivity.Name,
-                        Distance = newActivity.Distance,
-                        ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
-                        TimeInput = newActivity.TimeInput,
-                        UserId = newActivity.UserId,
-                        CaloriesBurned = newActivity.Calories,
-                        SportType = newActivity.SportType,
-                    };
-                    break;
-
-                case "Cycling":
-                    activity = new Cycling
-                    {
-                        Name = newActivity.Name,
-                        Distance = newActivity.Distance,
-                        ActivityDate = newActivity.ActivityDate,
-                        TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
-                        TimeInput = newActivity.TimeInput,
-                        UserId = newActivity.UserId,
-                        CaloriesBurned = newActivity.Calories,
-                        SportType = newActivity.SportType,
-                        // Lägg till andra properties om du har dem, t.ex. AverageSpeed
-                    };
-                    break;
-
-                default:
-                    return BadRequest("Unsupported activity type");
-            }
+                Name = newActivity.Name,
+                Distance = newActivity.Distance,
+                ActivityDate = newActivity.ActivityDate,
+                TotalTimeInSeconds = newActivity.TotalTimeInSeconds,
+                TimeInput = newActivity.TimeInput,
+                CaloriesBurned = newActivity.Calories,
+                AvgCadence = newActivity.AverageCadence,
+                UserId = newActivity.UserId,
+                SportType = newActivity.SportType,
+            };
 
             _context.Activities.Add(activity);
             await _context.SaveChangesAsync();
@@ -168,7 +86,6 @@ namespace TrainingTrackerAPI.Controllers
             activityToEdit.TimeInput = editDto.TimeInput;
             activityToEdit.CaloriesBurned = editDto.Calories;
             activityToEdit.SportType = editDto.SportType;
-            //activityToEdit.AverageCadence = editDto.AverageCadence;
 
             await _context.SaveChangesAsync();
             return Ok();
@@ -183,22 +100,16 @@ namespace TrainingTrackerAPI.Controllers
                 .Select(a => new ActivitesCreateDto
                 {
                     Id = a.Id,
-                    Type = EF.Property<string>(a, "ActivityType"),
+                    //Type = EF.Property<string>(a, "ActivityType"),
                     Name = a.Name,
                     Distance = a.Distance,
                     ActivityDate = a.ActivityDate,
-                    //UserId = a.UserId,
                     TotalTimeInSeconds = a.TotalTimeInSeconds,
                     TimeInput = a.TimeInput,
                     Calories = a.CaloriesBurned ?? 0,
                     SportType = a.SportType,
+                    AverageCadence = a.AvgCadence,
 
-
-
-
-
-                    // Only for Running
-                    //AverageCadence = a is Running r ? r.AverageCadence : null
                 })
                 .ToListAsync();
 
@@ -214,7 +125,7 @@ namespace TrainingTrackerAPI.Controllers
                 .Select(a => new ActivitesCreateDto
                 {
                     Id = a.Id,
-                    Type = EF.Property<string>(a, "ActivityType"),
+                    //Type = EF.Property<string>(a, "ActivityType"),
                     Name = a.Name,
                     Distance = a.Distance,
                     ActivityDate = a.ActivityDate,
@@ -222,6 +133,7 @@ namespace TrainingTrackerAPI.Controllers
                     TimeInput = a.TimeInput,
                     Calories = a.CaloriesBurned ?? 0,
                     SportType = a.SportType,
+                    AverageCadence = a.AvgCadence,
                 })
                 .FirstOrDefaultAsync();
 

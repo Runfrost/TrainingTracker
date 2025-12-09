@@ -16,6 +16,8 @@ namespace TrainingTrackerAPI.Models
         public SportType SportType { get; set; }
         public double? CaloriesBurned { get; set; }
         public ApplicationUser? User { get; set; }
+        public int? AvgCadence { get; set; }
+        public double? AvgPower { get; set; }
 
         public string? UserId { get; set; }
     }

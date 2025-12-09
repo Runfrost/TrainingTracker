@@ -1,6 +1,6 @@
 namespace TrainingTrackerAPI.Models
 {
-    public class Running : Activity
+    public class Running
     {
         public int AverageCadence { get; set; }
     }

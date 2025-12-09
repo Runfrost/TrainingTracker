@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingTrackerAPI.Data;
 
@@ -11,9 +12,11 @@ using TrainingTrackerAPI.Data;
 namespace TrainingTrackerAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251209130504_AddColumnsCadenceAndPower")]
+    partial class AddColumnsCadenceAndPower
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,6 +169,11 @@ namespace TrainingTrackerAPI.Migrations
                     b.Property<DateTime>("ActivityDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ActivityType")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
                     b.Property<int?>("AverageHeartRate")
                         .HasColumnType("int");
 
@@ -205,6 +213,10 @@ namespace TrainingTrackerAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Activities");
+
+                    b.HasDiscriminator<string>("ActivityType").HasValue("Activity");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("TrainingTrackerAPI.Models.ApplicationUser", b =>
@@ -285,6 +297,42 @@ namespace TrainingTrackerAPI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingTrackerAPI.Models.Cycling", b =>
+                {
+                    b.HasBaseType("TrainingTrackerAPI.Models.Activity");
+
+                    b.Property<int>("AvarageWatts")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Cycling");
+                });
+
+            modelBuilder.Entity("TrainingTrackerAPI.Models.Running", b =>
+                {
+                    b.HasBaseType("TrainingTrackerAPI.Models.Activity");
+
+                    b.Property<int>("AverageCadence")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Running");
+                });
+
+            modelBuilder.Entity("TrainingTrackerAPI.Models.Walking", b =>
+                {
+                    b.HasBaseType("TrainingTrackerAPI.Models.Activity");
+
+                    b.Property<int>("AverageCadence")
+                        .HasColumnType("int");
+
+                    b.ToTable("Activities", t =>
+                        {
+                            t.Property("AverageCadence")
+                                .HasColumnName("Walking_AverageCadence");
+                        });
+
+                    b.HasDiscriminator().HasValue("Walking");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
