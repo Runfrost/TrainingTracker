@@ -14,9 +14,8 @@
             Add and track your runs, rides and walks in one place.
         </p>
 
-
-        <!-- FORM: samma backend-fält, bara lite snyggare -->
-        <form method="post" asp-page-handler="">
+       
+        <form method="post" asp-page-handler="" id="activityForm">
             <input asp-for="Activity.Id" type="hidden" />
             <input asp-for="SortColumn" type="hidden" value="Date" />
             <input asp-for="SortDescending" type="hidden" />
@@ -56,61 +55,55 @@
                        step="0.1"
                        placeholder="Distance" />
             </div>
+        </form>
 
-            <button type="submit" class="activities-btn mb-5">
+        <div class="button-icons-row">
+            <!-- knappen skickar activityForm -->
+            <button type="submit" class="activities-btn" form="activityForm">
                 @(Model.Activity.Id == null ? "Add activity" : "Update activity")
             </button>
 
+            <!-- separat form för filtren -->
+            <form method="post" asp-page-handler="Filter">
+                <div class="icons-row">
+                    <input type="checkbox"
+                           asp-for="ShowCycling"
+                           onchange="this.form.submit()"
+                           hidden />
+                    <label asp-for="ShowCycling" class="activity-filter">
+                        <img src="~/images/cafter.png" alt="Cykling av" class="icon-default" />
+                        <img src="~/images/iconcy.png" alt="Cykling på" class="icon-active" />
+                    </label>
 
-        </form>
+                    <input type="checkbox"
+                           asp-for="ShowRunning"
+                           onchange="this.form.submit()"
+                           hidden />
+                    <label asp-for="ShowRunning" class="activity-filter">
+                        <img src="~/images/iconjoggingafter.png" alt="Löpning av" class="icon-default" />
+                        <img src="~/images/iconjogging.png" alt="Löpning på" class="icon-active" />
+                    </label>
 
-        <form method="post" asp-page-handler="Filter">
-            
-            <input type="checkbox"
-                   asp-for="ShowCycling"
-                   onchange="this.form.submit()"
-                   hidden />
+                    <input type="checkbox"
+                           asp-for="ShowWalking"
+                           onchange="this.form.submit()"
+                           hidden />
+                    <label asp-for="ShowWalking" class="activity-filter">
+                        <img src="~/images/iconwalkafter.png" alt="Promenad av" class="icon-default" />
+                        <img src="~/images/iconwalk.png" alt="Promenad på" class="icon-active" />
+                    </label>
+                </div>
+            </form>
+        </div>
 
-            <label asp-for="ShowCycling" class="activity-filter">
-                @* OFF bild (när filtret är AV)  *@
-                <img src="~/images/cafter.png" alt="Cykling av" class="icon-default" />
-                @* ON bild (när filtret är PÅ)  *@
-                <img src="~/images/iconcy.png" alt="Cykling på" class="icon-active" />
-            </label>
-
-            
-            <input type="checkbox"
-                   asp-for="ShowRunning"
-                   onchange="this.form.submit()"
-                   hidden />
-
-            <label asp-for="ShowRunning" class="activity-filter">
-                <img src="~/images/iconjoggingafter.png" alt="Löpning av" class="icon-default" />
-                <img src="~/images/iconjogging.png" alt="Löpning på" class="icon-active" />
-            </label>
-
-            
-            <input type="checkbox"
-                   asp-for="ShowWalking"
-                   onchange="this.form.submit()"
-                   hidden />
-
-            <label asp-for="ShowWalking" class="activity-filter">
-                <img src="~/images/iconwalkafter.png" alt="Promenad av" class="icon-default" />
-                <img src="~/images/iconwalk.png" alt="Promenad på" class="icon-active" />
-            </label>
-        </form>
-
-
-
-        @* Tabellen med aktiviteter *@
+       
         <h2 class="activities-subtitle">Recent activities</h2>
 
         <div class="activities-table-wrapper">
             <table class="activities-table">
                 <thead>
                     <tr>
-                        @* <th>ID</th> *@
+                       
                         <th>
                             <a asp-page="./activities" asp-route-SortColumn="Type" asp-route-SortDescending="@(Model.SortColumn == "Type" ? !Model.SortDescending : false)">Type</a>
                         </th>
@@ -136,7 +129,7 @@
                     @foreach (var activity in Model.Activities)
                     {
                         <tr>
-                            @* <td class="text-muted">@activity.Id</td> *@
+                            
                             <td>@activity.SportType.ToString()</td>
                             <td>@activity.Name</td>
                             <td>@($"{activity.Distance:F1} km")</td>

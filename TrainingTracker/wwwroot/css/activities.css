@@ -185,7 +185,7 @@
         white-space: nowrap;
     }
 
-    
+
     .activities-table td.text-muted {
         color: #888;
     }
@@ -194,25 +194,24 @@
 .activity-filter {
     display: inline-block;
     cursor: pointer;
-    margin-right: 8px; 
+    margin-right: 8px; /*avstånd mellan gubbarna */
 }
 
     .activity-filter img {
-        width: 65px; 
+        width: 65px;
         height: 65px;
         transition: transform 0.15s ease;
     }
 
     .activity-filter:hover img {
-        transform: scale(1.2); 
+        transform: scale(1.2);
     }
 
-    
     .activity-filter .icon-active {
         display: none;
     }
 
-/* När checkboxen är ikryssad visas ON-ikon och gömmer OFF ikonen */
+
 input[type="checkbox"]:checked + label .icon-default {
     display: none;
 }
@@ -221,7 +220,26 @@ input[type="checkbox"]:checked + label .icon-active {
     display: inline-block;
 }
 
-/*Muspekaren blir “hand” över ikonerna */
-.activity-filter {
-    cursor: pointer;
+
+.button-icons-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+    margin-bottom: 20px;
 }
+
+
+.icons-row {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+   
+
+
+
+
