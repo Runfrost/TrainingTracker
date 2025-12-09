@@ -27,9 +27,18 @@
                         @foreach (var row in Model.ActivityTotal.WeeklyRows)
                         {
                             <tr>
-                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
-                                    @row.ThisPeriod.ToString("F0") @row.Unit
-                                </td>
+                                @if (row.Unit == "s")
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @TimeSpan.FromSeconds(row.ThisPeriod).ToString(@"hh\:mm\:ss")
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @row.ThisPeriod.ToString("F0") @row.Unit
+                                    </td>
+                                }
 
                                 <td class="text-center">
                                     @if (row.IsUp)
@@ -42,7 +51,14 @@
                                     }
                                 </td>
 
-                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                @if (row.Unit == "s")
+                                {
+                                    <td>@TimeSpan.FromSeconds(row.PreviousPeriod).ToString(@"hh\:mm\:ss")</td>
+                                }
+                                else
+                                {
+                                    <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                }
                             </tr>
                         }
 
@@ -55,9 +71,20 @@
                         @foreach (var row in Model.ActivityTotal.MonthlyRows)
                         {
                             <tr>
-                                <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
-                                    @row.ThisPeriod.ToString("F0") @row.Unit
-                                </td>
+
+                                @if (row.Unit == "s")
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @TimeSpan.FromSeconds(row.ThisPeriod).ToString(@"hh\:mm\:ss")
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="@(row.IsUp ? "text-bg-success" : "text-bg-danger") badge rounded-pill p-2 m-1 pill-fixed">
+                                        @row.ThisPeriod.ToString("F0") @row.Unit
+                                    </td>
+                                }
+
 
                                 <td class="text-center">
                                     @if (row.IsUp)
@@ -69,8 +96,14 @@
                                         <i class="bi bi-caret-down-fill text-danger"></i>
                                     }
                                 </td>
-
-                                <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                @if (row.Unit == "s")
+                                {
+                                    <td>@TimeSpan.FromSeconds(row.PreviousPeriod).ToString(@"hh\:mm\:ss")</td>
+                                }
+                                else
+                                {
+                                    <td>@row.PreviousPeriod.ToString("F0") @row.Unit</td>
+                                }
                             </tr>
                         }
                     </tbody>

@@ -17,18 +17,9 @@ namespace TrainingTrackerAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
             modelBuilder.Entity<ApplicationUser>()
             .Property(u => u.Gender)
             .HasConversion<string>();
-
-            // Configure Table-Per-Hierarchy (TPH) inheritance
-            //modelBuilder.Entity<Activity>()
-            //    .HasDiscriminator<string>("ActivityType")
-            //    .HasValue<Running>("Running")
-            //    .HasValue<Walking>("Walking")
-            //    .HasValue<Cycling>("Cycling");
-
         }
     }
 }

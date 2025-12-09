@@ -71,7 +71,7 @@ namespace TrainingTrackerAPI.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditActivityById(int id, ActivitiesEditDto editDto)
+        public async Task<IActionResult> EditActivityById(int id, ActivitesCreateDto editDto)
         {
             var activityToEdit = _context.Activities.Where(a => a.Id == id).SingleOrDefaultAsync().Result;
             if (activityToEdit == null)
@@ -100,7 +100,6 @@ namespace TrainingTrackerAPI.Controllers
                 .Select(a => new ActivitesCreateDto
                 {
                     Id = a.Id,
-                    //Type = EF.Property<string>(a, "ActivityType"),
                     Name = a.Name,
                     Distance = a.Distance,
                     ActivityDate = a.ActivityDate,
@@ -125,7 +124,6 @@ namespace TrainingTrackerAPI.Controllers
                 .Select(a => new ActivitesCreateDto
                 {
                     Id = a.Id,
-                    //Type = EF.Property<string>(a, "ActivityType"),
                     Name = a.Name,
                     Distance = a.Distance,
                     ActivityDate = a.ActivityDate,
