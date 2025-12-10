@@ -1,6 +1,6 @@
-﻿using TrainingTracker.ViewModel;
+﻿using TrainingTracker.Service;
 
-namespace TrainingTracker.Service
+namespace TrainingTracker.ViewModel
 {
     public class SessionInfo
     {

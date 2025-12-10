@@ -21,6 +21,5 @@ namespace TrainingTracker.ViewModel
         public int TotalTimeInSeconds { get; set; }
         public double? Calories { get; set; }
         public string? UserId { get; set; }
-        //public double CaloriesBurnt => CalorieService.CalculateCalories(70, TotalTimeInSeconds, SportType.Running);
     }
 }

@@ -39,7 +39,7 @@ namespace TrainingTracker.Pages
         public IEnumerable<SelectListItem> SportTypeOptions { get; set; }
 
         [BindProperty]
-        public ViewModel.ActivityViewModel Activity { get; set; } = new();
+        public ActivityViewModel Activity { get; set; } = new();
 
         public List<ActivityViewModel> Activities { get; set; }
         public ActivityTotals ActivityTotal { get; set; } = new();
@@ -89,6 +89,7 @@ namespace TrainingTracker.Pages
                 return Page();
             }
 
+            // Add new activity
             if (Activity.Id == null)
             {
                 Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;
@@ -101,6 +102,7 @@ namespace TrainingTracker.Pages
                     
                 await _api.SaveActivity(Activity);
             }
+            // Edit new activity
             else
             {
                 Activity.TotalTimeInSeconds = (Activity.TimeInput.Hour * 3600) + (Activity.TimeInput.Minute * 60) + Activity.TimeInput.Second;

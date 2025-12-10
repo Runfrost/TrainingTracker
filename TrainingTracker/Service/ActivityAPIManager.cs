@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json;
-using TrainingTrackerAPI.DTO;
-using TrainingTrackerAPI.Models;
 using TrainingTracker.ViewModel;
 
 

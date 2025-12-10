@@ -2,10 +2,10 @@
 
 namespace TrainingTrackerAPI.DTO
 {
-    public class ActivitesCreateDto
+    public class ActivitiesDTO
     {
         public int? Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         public double Distance { get; set; }
         public DateTime ActivityDate { get; set; }
         public string? UserId { get; set; }
