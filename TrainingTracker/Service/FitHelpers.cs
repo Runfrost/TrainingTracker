@@ -27,7 +27,7 @@ namespace TrainingTracker.Service
             }
             else
             {
-                return $"{cadence} rpm"; ; // cycling or other sports → leave as-is
+                return $"{cadence} rpm"; // cycling or other sports → leave as-is
             }
         }
         public static string SpeedToPace(double speedMps)

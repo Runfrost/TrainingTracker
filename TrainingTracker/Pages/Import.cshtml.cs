@@ -10,8 +10,6 @@ using TrainingTracker.Service;
 
 namespace TrainingTracker.Pages
 {
-    
-    
     public class ImportModel : PageModel
     {
         private readonly ActivityAPIManager _api;
@@ -29,7 +27,7 @@ namespace TrainingTracker.Pages
         [BindProperty]
         [Required(ErrorMessage = "Session title is required.")]
         public string? SessionTitle { get; set; }
-        public Service.SessionInfo? Session { get; set; }
+        public ViewModel.SessionInfo? Session { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -47,8 +45,8 @@ namespace TrainingTracker.Pages
 
             JsonOutput = FitToJson.ExtractSessionToJson(stream);
 
-            // JSON is an array ? so deserialize a list
-            var list = JsonSerializer.Deserialize<List<Service.SessionInfo>>(JsonOutput);
+            // Deserialize JSON to list
+            var list = JsonSerializer.Deserialize<List<ViewModel.SessionInfo>>(JsonOutput);
 
             Session = list?.FirstOrDefault();
             Session.ActivityName = SessionTitle;

@@ -19,7 +19,6 @@
             <input asp-for="Activity.Id" type="hidden" />
             <input asp-for="SortColumn" type="hidden" value="Date" />
             <input asp-for="SortDescending" type="hidden" />
-            @* <input asp-for="Activity.Type" type="hidden" value="Running" /> *@
             <div class="mb-2">
                 <select asp-for="Activity.SportType"
                         asp-items="Model.SportTypeOptions"

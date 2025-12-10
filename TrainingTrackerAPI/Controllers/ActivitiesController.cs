@@ -17,6 +17,7 @@ namespace TrainingTrackerAPI.Controllers
         {
             _context = context;
         }
+
         [HttpPost("Upload")]
         public async Task<IActionResult> UploadActivity([FromBody] SessionInfo sessionInfo)
         {
@@ -46,8 +47,9 @@ namespace TrainingTrackerAPI.Controllers
 
             return Ok(activity);
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateActivity([FromBody] DTO.ActivitesCreateDto newActivity)
+        public async Task<IActionResult> CreateActivity([FromBody] DTO.ActivitiesDTO newActivity)
         {
             Activity activity = new()
             {
@@ -68,10 +70,8 @@ namespace TrainingTrackerAPI.Controllers
             return Ok(activity);
         }
 
-
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditActivityById(int id, ActivitesCreateDto editDto)
+        public async Task<IActionResult> EditActivityById(int id, ActivitiesDTO editDto)
         {
             var activityToEdit = _context.Activities.Where(a => a.Id == id).SingleOrDefaultAsync().Result;
             if (activityToEdit == null)
@@ -97,7 +97,7 @@ namespace TrainingTrackerAPI.Controllers
         {
             var activities = await _context.Activities
                 .Where(a => a.UserId == userId)
-                .Select(a => new ActivitesCreateDto
+                .Select(a => new ActivitiesDTO
                 {
                     Id = a.Id,
                     Name = a.Name,
@@ -121,7 +121,7 @@ namespace TrainingTrackerAPI.Controllers
         {
             var activity = await _context.Activities
                 .Where(a => a.Id == id)
-                .Select(a => new ActivitesCreateDto
+                .Select(a => new ActivitiesDTO
                 {
                     Id = a.Id,
                     Name = a.Name,

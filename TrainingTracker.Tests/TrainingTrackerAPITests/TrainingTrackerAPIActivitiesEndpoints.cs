@@ -19,7 +19,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
             //Arrange
             var typeOfActivity = SportType.Running;
             var requestUri = "/api/activities";
-            ActivitesCreateDto activity = new ActivitesCreateDto
+            ActivitiesDTO activity = new ActivitiesDTO
             {
                 Name = "Night run",
                 Distance = 5,
@@ -29,7 +29,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var created = await response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var created = await response.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
             //Assert
             response.EnsureSuccessStatusCode();
@@ -43,7 +43,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
             double expectedDistance = 10;
             var typeOfActivity = SportType.Running;
             var requestUri = "/api/activities";
-            ActivitesCreateDto activity = new ActivitesCreateDto
+            ActivitiesDTO activity = new ActivitiesDTO
             {
                 Name = "Night run",
                 Distance = 5,
@@ -53,12 +53,12 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var created = await response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var created = await response.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
             created.Distance = expectedDistance; // Edit distance
 
             var editResponse = await _httpClient.PutAsJsonAsync($"{requestUri}/{created.Id}", created);
-            var edited = await editResponse.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var edited = await editResponse.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, editResponse.StatusCode);
@@ -72,7 +72,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
             //Arrange
             var typeOfActivity = SportType.Running;
             var requestUri = "/api/activities";
-            ActivitesCreateDto activity = new ActivitesCreateDto
+            ActivitiesDTO activity = new ActivitiesDTO
             {
                 Name = "Night run",
                 Distance = 5,
@@ -82,7 +82,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var created = await response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var created = await response.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
             var deleteResponse = await _httpClient.DeleteAsync($"{requestUri}/{created.Id}");
 
@@ -97,7 +97,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
             //Arrange
             var typeOfActivity = SportType.Running;
             var requestUri = "/api/activities";
-            ActivitesCreateDto activity = new ActivitesCreateDto
+            ActivitiesDTO activity = new ActivitiesDTO
             {
                 Name = "Night run",
                 Distance = 5,
@@ -107,9 +107,9 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var created = await response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var created = await response.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
-            var getResponse = await _httpClient.GetFromJsonAsync<ActivitesCreateDto>($"{requestUri}/{created?.Id}");
+            var getResponse = await _httpClient.GetFromJsonAsync<ActivitiesDTO>($"{requestUri}/{created?.Id}");
 
             //Assert
             Assert.Equal(created?.Id, getResponse?.Id);
@@ -123,7 +123,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
         {
             //Arrange
             var requestUri = "/api/activities";
-            ActivitesCreateDto activity = new()
+            ActivitiesDTO activity = new()
             {
                 Name = "Run",
                 Distance = 5,
@@ -133,7 +133,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var createdActivity = response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var createdActivity = response.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
             //Assert
             response.EnsureSuccessStatusCode();
@@ -162,7 +162,7 @@ namespace TrainingTracker.Tests.TrainingTrackerAPITests
 
             //Act
             var response = await _httpClient.PostAsJsonAsync(requestUri, activity);
-            var createdActivity = await response.Content.ReadFromJsonAsync<ActivitesCreateDto>();
+            var createdActivity = await response.Content.ReadFromJsonAsync<ActivitiesDTO>();
 
             //Assert
             Assert.True(response.IsSuccessStatusCode);
