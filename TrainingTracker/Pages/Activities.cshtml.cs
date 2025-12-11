@@ -17,15 +17,15 @@ namespace TrainingTracker.Pages
     {
         private readonly ActivitySummaryService _activitySummaryService;
         private readonly ActivityAPIManager _api;
-        private readonly ILogger<IndexModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly FilterActivities _filterActivities;
 
-        public ActivitiesModel(ILogger<IndexModel> logger, IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user, ActivitySummaryService activitySummaryService)
+        public ActivitiesModel(IHttpClientFactory factory, ActivityAPIManager api, UserManager<ApplicationUser> user, ActivitySummaryService activitySummaryService, FilterActivities filterActivities)
         {
-            _logger = logger;
             _api = api;
             _userManager = user;
             _activitySummaryService = activitySummaryService;
+            _filterActivities = filterActivities;
         }
         public static readonly Dictionary<SortField, string> SortFieldDisplay = new()
 {
@@ -67,14 +67,16 @@ namespace TrainingTracker.Pages
             if (editId != 0)
                 Activity = await _api.GetActivity(editId);
 
-            await LoadFilteredActivitiesAsync();
-            SortColumns(Activities);
+            var user = await GetCurrentUserAsync();
+            Activities = await _filterActivities.LoadFilteredActivitiesAsync(ShowCycling, ShowRunning, ShowWalking, user.Id);
+            Activities = SortColumns.ReturnSortedActivities(Activities, SortDescending, SortColumn);
             ActivityTotal = _activitySummaryService.CalculateActivityIntervals(Activities);
             LoadEnumList();
         }
         public async Task<IActionResult> OnPostFilterAsync()
         {
-            await LoadFilteredActivitiesAsync();
+            var user = await GetCurrentUserAsync();
+            Activities = await _filterActivities.LoadFilteredActivitiesAsync(ShowCycling, ShowRunning, ShowWalking, user.Id);
             ActivityTotal = _activitySummaryService.CalculateActivityIntervals(Activities);
             LoadEnumList();
             return Page();
@@ -84,7 +86,8 @@ namespace TrainingTracker.Pages
             var currentUser = await GetCurrentUserAsync();
             if (!ModelState.IsValid)
             {
-                await LoadFilteredActivitiesAsync();
+                var user = await GetCurrentUserAsync();
+                Activities = await _filterActivities.LoadFilteredActivitiesAsync(ShowCycling, ShowRunning, ShowWalking, user.Id);
                 LoadEnumList();
                 return Page();
             }
@@ -113,57 +116,7 @@ namespace TrainingTracker.Pages
 
             return RedirectToPage("./Activities");
         }
-        private void SortColumns(List<ActivityViewModel> activities)
-        {
-            Activities = SortColumn switch
-            {
-                SortField.Type => SortDescending
-                    ? activities.OrderByDescending(a => a.SportType.ToString()).ToList()
-                    : activities.OrderBy(a => a.SportType.ToString()).ToList(),
-
-                SortField.Title => SortDescending
-                    ? activities.OrderByDescending(a => a.Name).ToList()
-                    : activities.OrderBy(a => a.Name).ToList(),
-
-                SortField.Date => SortDescending
-                    ? activities.OrderByDescending(a => a.ActivityDate).ToList()
-                    : activities.OrderBy(a => a.ActivityDate).ToList(),
-
-                SortField.Distance => SortDescending
-                    ? activities.OrderByDescending(a => a.Distance).ToList()
-                    : activities.OrderBy(a => a.Distance).ToList(),
-
-                SortField.Duration => SortDescending
-                    ? activities.OrderByDescending(a => a.TotalTimeInSeconds).ToList()
-                    : activities.OrderBy(a => a.TotalTimeInSeconds).ToList(),
-
-                SortField.Calories => SortDescending
-                    ? activities.OrderByDescending(a => a.Calories).ToList()
-                    : activities.OrderBy(a => a.Calories).ToList(),
-
-                _ => Activities
-            };
-        }
-        private async Task LoadFilteredActivitiesAsync()
-        {
-            var userId = _userManager.GetUserId(User);
-            
-            var allActivities = await _api.GetAllActivities(userId);
-
-            var filtered = new List<ActivityViewModel>();
-
-            if (ShowCycling)
-                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Cycling));
-
-            if (ShowRunning)
-                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Running));
-
-            if (ShowWalking)
-                filtered.AddRange(allActivities.Where(a => a.SportType == ViewModel.SportType.Walking));
-
-            Activities = filtered;
-        }
-        public void LoadEnumList()
+        private void LoadEnumList()
         {
             SportTypeOptions = Enum.GetValues(typeof(ViewModel.SportType))
                 .Cast<ViewModel.SportType>()

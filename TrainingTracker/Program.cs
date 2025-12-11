@@ -37,6 +37,7 @@ builder.Services.AddHttpClient("Backend", client =>
 
 builder.Services.AddScoped<ActivityAPIManager>();
 builder.Services.AddScoped<ActivitySummaryService>();
+builder.Services.AddScoped<FilterActivities>();
 
 
 builder.Services.AddRazorPages(options =>
