@@ -5,6 +5,7 @@ using System.Security.Claims;
 using TrainingTrackerAPI.Data;
 using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
+using TrainingTracker.Shared.Models;
 
 namespace TrainingTrackerAPI.Controllers
 {

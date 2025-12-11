@@ -1,4 +1,4 @@
-﻿namespace TrainingTrackerAPI.Models
+﻿namespace TrainingTracker.Shared.Enums
 {
     public enum SportType
     {

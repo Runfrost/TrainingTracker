@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TrainingTracker.Service;
+using TrainingTracker.Shared.Enums;
 
 namespace TrainingTracker.ViewModel
 {

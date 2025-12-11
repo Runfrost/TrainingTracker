@@ -1,4 +1,5 @@
-﻿using TrainingTrackerAPI.Models;
+﻿using TrainingTracker.Shared.Enums;
+using TrainingTrackerAPI.Models;
 
 namespace TrainingTrackerAPI.DTO
 {

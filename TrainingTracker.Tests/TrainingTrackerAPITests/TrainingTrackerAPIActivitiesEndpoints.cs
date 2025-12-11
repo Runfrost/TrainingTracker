@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net;
 using System.Net.Http.Json;
+using TrainingTracker.Shared.Enums;
+using TrainingTracker.Shared.Models;
 using TrainingTrackerAPI.DTO;
 using TrainingTrackerAPI.Models;
 

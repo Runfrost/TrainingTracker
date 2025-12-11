@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using TrainingTracker.Shared.Enums;
 
 namespace TrainingTrackerAPI.Models
 {

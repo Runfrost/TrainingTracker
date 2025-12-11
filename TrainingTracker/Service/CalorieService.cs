@@ -1,4 +1,5 @@
-﻿using TrainingTracker.ViewModel;
+﻿using TrainingTracker.Shared.Enums;
+using TrainingTracker.ViewModel;
 
 namespace TrainingTracker.Service
 {

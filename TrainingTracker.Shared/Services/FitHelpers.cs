@@ -1,4 +1,6 @@
-﻿namespace TrainingTrackerAPI.Models
+﻿using TrainingTracker.Shared.Enums;
+
+namespace TrainingTracker.Shared.Services
 {
     public static class FitHelpers
     {

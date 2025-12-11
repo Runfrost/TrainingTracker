@@ -1,6 +1,7 @@
-﻿using TrainingTracker.Service;
+﻿using TrainingTracker.Shared.Enums;
+using TrainingTracker.Shared.Services;
 
-namespace TrainingTracker.ViewModel
+namespace TrainingTracker.Shared.Models
 {
     public class SessionInfo
     {

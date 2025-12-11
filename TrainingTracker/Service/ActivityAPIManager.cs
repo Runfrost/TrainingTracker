@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json;
 using TrainingTracker.ViewModel;
+using TrainingTracker.Shared.Models;
 
 
 namespace TrainingTracker.Service

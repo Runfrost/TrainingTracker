@@ -10,6 +10,8 @@ using System.Globalization;
 using TrainingTracker.Service;
 using TrainingTrackerAPI.Services;
 using TrainingTracker.Models;
+using TrainingTracker.Shared.Enums;
+
 
 namespace TrainingTracker.Pages
 {
@@ -118,8 +120,8 @@ namespace TrainingTracker.Pages
         }
         private void LoadEnumList()
         {
-            SportTypeOptions = Enum.GetValues(typeof(ViewModel.SportType))
-                .Cast<ViewModel.SportType>()
+            SportTypeOptions = Enum.GetValues(typeof(SportType))
+                .Cast<SportType>()
                 .Select(a => new SelectListItem
                 {
                     Value = ((int)a).ToString(),

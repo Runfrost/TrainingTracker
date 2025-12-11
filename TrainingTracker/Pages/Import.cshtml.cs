@@ -7,6 +7,8 @@ using TrainingTracker.Models;
 using TrainingTrackerAPI.Models;
 using System.ComponentModel.DataAnnotations;
 using TrainingTracker.Service;
+using TrainingTracker.Shared.Models;
+
 
 namespace TrainingTracker.Pages
 {
@@ -27,7 +29,7 @@ namespace TrainingTracker.Pages
         [BindProperty]
         [Required(ErrorMessage = "Session title is required.")]
         public string? SessionTitle { get; set; }
-        public ViewModel.SessionInfo? Session { get; set; }
+        public SessionInfo? Session { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -46,7 +48,7 @@ namespace TrainingTracker.Pages
             JsonOutput = FitToJson.ExtractSessionToJson(stream);
 
             // Deserialize JSON to list
-            var list = JsonSerializer.Deserialize<List<ViewModel.SessionInfo>>(JsonOutput);
+            var list = JsonSerializer.Deserialize<List<SessionInfo>>(JsonOutput);
 
             Session = list?.FirstOrDefault();
             Session.ActivityName = SessionTitle;

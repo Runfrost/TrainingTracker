@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrainingTracker.Service;
+using TrainingTracker.Shared.Enums;
 using TrainingTracker.ViewModel;
 using TrainingTrackerAPI.Models;
-using SportType = TrainingTracker.ViewModel.SportType;
 
 namespace TrainingTracker.Tests.TrainingTrackerTests
 {
